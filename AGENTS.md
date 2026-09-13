@@ -19,7 +19,6 @@ pnpm build
 pnpm lint
 ```
 
-- Используйте `pnpm exec next dev` для локальной разработки.
 - Перед завершением TS/TSX-изменений запускайте `pnpm build` и `pnpm lint`.
 - Автоматических тестов нет: вручную проверьте `/`, `/reviews`, форму, keyboard navigation и mobile layout.
 - Не редактируйте `pnpm-lock.yaml` вручную.
@@ -30,15 +29,17 @@ pnpm lint
 - `app/page.tsx` — главная страница и client-side состояние формы.
 - `app/reviews/page.tsx` — разметка отзывов.
 - `app/reviews/stories.ts` — типы и единственный источник историй учеников.
-- `app/api/enquiries/route.ts` — server-side валидация и Telegram notification.
+- `app/api/enquiries/route.ts` — server-side валидация и рассылка заявок.
+- `app/api/telegram/webhook/route.ts` — защищённый Telegram webhook и команда `/chatid`.
 - `components/` — site chrome и UI-примитивы.
+- `lib/telegram.ts` — разбор списка администраторских chat ID и вызов Telegram API.
 - `lib/` — Zod-схема заявки и утилиты.
 - `public/assets/` — изображения и локальные шрифты.
 - `app/globals.css` — токены, типографика и responsive rules.
 
 Используйте App Router и alias `@/*`. По умолчанию создавайте Server Components; `"use client"` добавляйте только для state, effects, events или browser API.
 
-## Заявки
+## Заявки и Telegram
 
 Клиент отправляет JSON на `POST /api/enquiries`. Сохраняйте:
 
@@ -49,14 +50,17 @@ pnpm lint
 - UUID `id` для идемпотентности;
 - нейтральные ошибки без внутренних деталей.
 
-После успешной валидации маршрут вызывает Telegram Bot API `sendMessage`. В Vercel нужны server-only variables:
+После успешной валидации маршрут рассылает сообщение через Telegram Bot API `sendMessage` во все ID из `TELEGRAM_CHAT_IDS`. Значения разделяются запятой или новой строкой. `TELEGRAM_CHAT_ID` допустим только как legacy fallback для одного чата.
+
+Переменные окружения:
 
 - `TELEGRAM_BOT_TOKEN`;
-- `TELEGRAM_CHAT_ID`.
+- `TELEGRAM_CHAT_IDS`;
+- `TELEGRAM_WEBHOOK_SECRET`.
 
-Никогда не используйте их в client component, `NEXT_PUBLIC_*`, HTML или логах. В сообщение передаются имя, контакт, направление, уровень хаоса, id и время. Не логируйте полное тело заявки.
+Webhook находится по адресу `/api/telegram/webhook`. Он принимает только запросы с заголовком `X-Telegram-Bot-Api-Secret-Token`, равным `TELEGRAM_WEBHOOK_SECRET`, и отвечает на `/chatid` ID текущего чата. После публикации webhook нужно зарегистрировать методом `setWebhook`.
 
-Если Telegram недоступен или variables не заданы, верните понятный HTTP 503 и не показывайте пользователю token или ответ с внутренними деталями.
+Никогда не используйте переменные в client component, `NEXT_PUBLIC_*`, HTML или логах. Не логируйте полное тело заявки. Если все отправки не удались или variables не заданы, верните HTTP 503 без внутренних деталей.
 
 ## UI и контент
 
@@ -66,7 +70,6 @@ pnpm lint
 - Для `.woff2` в `public/assets/fonts.css` используйте `format('woff2')`.
 - Используйте CSS tokens `--pink`, `--lime`, `--blue`, `--ink`, `--paper`; не размножайте произвольные цвета.
 - Сохраняйте focus-visible, aria labels, keyboard access и alt text.
-- После CSS-изменений проверьте ширины примерно 1440, 900, 600 и 360 px.
 - Новые истории должны содержать четыре этапа: старт, разбор ситуации, подготовка, результат. Реальные фотографии и цитаты требуют разрешения.
 
 ## Конфигурация
@@ -88,7 +91,7 @@ pnpm lint
 Перед push:
 
 1. Просмотрите diff и не перезаписывайте несвязанные изменения.
-2. Сделайте небольшой тематический commit в повелительном наклонении.
+2. Сделайте небольшой тематический commit.
 3. Запустите build и lint.
 4. Проверьте Vercel build status и production URL.
 
