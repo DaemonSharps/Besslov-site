@@ -110,17 +110,19 @@ export function FortuneWheel() {
     <div className={styles.wheelColumn}>
       <div className={styles.wheelStage}>
         <span className={styles.pointer} aria-hidden="true" />
-        <div className={styles.wheel} style={wheelStyle} role="img" aria-label="Колесо с шестью полезными бонусами">
-          {prizes.map((prize, index) => (
-            <span
-              className={styles.wheelLabel}
-              key={prize.id}
-              style={{ "--label-angle": `${index * 60 + 30}deg` } as WheelStyle}
-              aria-hidden="true"
-            >
-              {prize.title}
-            </span>
-          ))}
+        <div className={styles.wheelFrame}>
+          <div className={styles.wheel} style={wheelStyle} role="img" aria-label="Колесо с шестью полезными бонусами">
+            {prizes.map((prize, index) => (
+              <span
+                className={styles.wheelLabel}
+                key={prize.id}
+                style={{ "--label-angle": `${index * 60 + 30}deg` } as WheelStyle}
+                aria-hidden="true"
+              >
+                {prize.title}
+              </span>
+            ))}
+          </div>
           <button className={styles.wheelButton} type="button" onClick={spin} disabled={!canSpin} aria-label={buttonLabel}>
             {spinning ? <RotateCw className={styles.spinningIcon} size={25} aria-hidden="true" /> : result ? <Check size={25} aria-hidden="true" /> : buttonLabel}
           </button>

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { flushSync } from "react-dom";
+import Link from "next/link";
 import { ArrowUpRight, ArrowDown, BookOpen, PencilLine, FileCheck2, Check, X, Heart, MoveDown } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -78,7 +79,22 @@ export default function Home() {
           <div className="note hero-note"><span className="tape tape-pink"/><p>Можно не понимать.<br/>Можно переспрашивать.<br/><strong>Можно быть собой.</strong></p><Heart size={24}/></div>
         </div>
       </div><div className="hero-bottom container"><span>Меньше «зазубри». Больше «теперь понятно».</span><a href="#story" aria-label="К моей истории"><MoveDown size={22}/></a></div></section>
-      <section className="story-section section container" id="story">
+       <section className="fortune-promo container" aria-labelledby="fortune-promo-title">
+         <Link className="fortune-promo-inner" href="/fortune">
+           <span className="fortune-promo-tape" aria-hidden="true" />
+           <div className="fortune-promo-copy">
+             <span className="eyebrow">БОНУСЫ ДЛЯ УЧЁБЫ</span>
+             <h2 id="fortune-promo-title">Крути рулетку<br /><span>полезных подарков!</span></h2>
+             <p>Шпаргалки, статьи и другие материалы — бесплатно и без регистрации.</p>
+             <span className="fortune-promo-action">Крутить рулетку <ArrowUpRight size={19} aria-hidden="true" /></span>
+           </div>
+           <div className="fortune-promo-wheel" aria-hidden="true">
+             <span className="fortune-promo-pointer" />
+             <span>крути!</span>
+           </div>
+         </Link>
+       </section>
+       <section className="story-section section container" id="story">
         <div className="story-heading"><span className="eyebrow">01 / ДАВАЙ ЗНАКОМИТЬСЯ</span><h2>Моя <span className="underline-pink">история</span></h2><span className="hand story-aside">по ту сторону экрана</span></div>
         <div className="story-copy"><p className="large-copy">Я — филолог. И я за то, чтобы<br className="desktop-br"/> русский стал <mark>понятным.</mark></p><p>Я окончила филологический факультет МПГУ. Уже больше трёх лет преподаю русский язык и литературу, больше двух лет занимаюсь репетиторством и преподаю в онлайн-школе.</p><p>На моих занятиях можно задавать любые вопросы, ошибаться и пробовать снова. Вместо монолога — живой разговор, вместо бесконечной зубрёжки — поиск смысла.</p><div className="story-tags"><span>Филология</span><span>Живой диалог</span><span>Авторские материалы</span></div></div>
         <div className="story-note note"><span className="tape tape-blue"/><Sticker kind="heart"/><p className="hand">На твоей стороне.<br/>Даже если с запятыми<br/>пока всё сложно.</p></div>
