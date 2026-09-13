@@ -30,7 +30,8 @@ pnpm lint
 - `app/reviews/page.tsx` — разметка отзывов.
 - `app/reviews/stories.ts` — типы и единственный источник историй учеников.
 - `app/api/enquiries/route.ts` — server-side валидация и рассылка заявок.
-- `app/api/telegram/webhook/route.ts` — защищённый Telegram webhook и команда `/chatid`.
+- `app/api/telegram/webhook/route.ts` — защищённый Telegram webhook и команды `/start`, `/chatid`.
+- `instrumentation.ts` — автоматическая регистрация webhook через `setWebhook` при старте Node.js-приложения.
 - `components/` — site chrome и UI-примитивы.
 - `lib/telegram.ts` — разбор списка администраторских chat ID и вызов Telegram API.
 - `lib/` — Zod-схема заявки и утилиты.
@@ -58,7 +59,7 @@ pnpm lint
 - `TELEGRAM_CHAT_IDS`;
 - `TELEGRAM_WEBHOOK_SECRET`.
 
-Webhook находится по адресу `/api/telegram/webhook`. Он принимает только запросы с заголовком `X-Telegram-Bot-Api-Secret-Token`, равным `TELEGRAM_WEBHOOK_SECRET`, и отвечает на `/chatid` ID текущего чата. После публикации webhook нужно зарегистрировать методом `setWebhook`.
+Webhook находится по адресу `/api/telegram/webhook`. При каждом старте Node.js-приложение повторно регистрирует этот URL через Telegram `setWebhook`. Он принимает только запросы с заголовком `X-Telegram-Bot-Api-Secret-Token`, равным `TELEGRAM_WEBHOOK_SECRET`, и отвечает на `/chatid` ID текущего чата. После публикации webhook нужно зарегистрировать методом `setWebhook`.
 
 Никогда не используйте переменные в client component, `NEXT_PUBLIC_*`, HTML или логах. Не логируйте полное тело заявки. Если все отправки не удались или variables не заданы, верните HTTP 503 без внутренних деталей.
 
