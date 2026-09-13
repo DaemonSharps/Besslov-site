@@ -75,7 +75,7 @@ export default function Home() {
           <div className="lesson-meta"><span>Индивидуально</span><span>Онлайн</span><span>60 минут</span></div>
         </div>
         <div className="hero-visual"><div className="portrait-frame" role="img" aria-label="Портрет преподавателя из предоставленного референса"/><Doodle className="hero-star"/><span className="hero-hi hand">привет, это я!</span>
-          <div className="note hero-note"><span className="tape tape-pink"/><span className="note-title">НА ПОЛЯХ</span><p>Можно не понимать.<br/>Можно переспрашивать.<br/><strong>Можно быть собой.</strong></p><Heart size={24}/></div>
+          <div className="note hero-note"><span className="tape tape-pink"/><p>Можно не понимать.<br/>Можно переспрашивать.<br/><strong>Можно быть собой.</strong></p><Heart size={24}/></div>
         </div>
       </div><div className="hero-bottom container"><span>Меньше «зазубри». Больше «теперь понятно».</span><a href="#story" aria-label="К моей истории"><MoveDown size={22}/></a></div></section>
       <section className="story-section section container" id="story">
