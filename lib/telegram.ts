@@ -1,7 +1,6 @@
 export function getTelegramChatIds() {
   const configured = process.env.TELEGRAM_CHAT_IDS || process.env.TELEGRAM_CHAT_ID || "";
-  return [...new Set(configured.split(/[,
-]/).map((value) => value.trim()).filter(Boolean))];
+  return [...new Set(configured.split(/[,\n]/).map((value) => value.trim()).filter(Boolean))];
 }
 
 export async function sendTelegramMessage(token: string, chatId: string, text: string) {
