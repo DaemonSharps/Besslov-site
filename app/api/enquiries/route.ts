@@ -1,4 +1,5 @@
 import { enquirySchema } from "@/lib/enquiry-validation";
+import { getTelegramChatIds, sendTelegramMessage } from "@/lib/telegram";
 
 export async function POST(request: Request) {
   const headers = { "Cache-Control": "no-store" };
@@ -32,8 +33,8 @@ export async function POST(request: Request) {
   }
 
   const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
-  if (!token || !chatId) {
+  const chatIds = getTelegramChatIds();
+  if (!token || chatIds.length === 0) {
     console.error("Telegram notification is not configured");
     return Response.json({ error: "Заявки временно недоступны. Попробуй ещё раз позже." }, { status: 503, headers });
   }
@@ -50,20 +51,15 @@ export async function POST(request: Request) {
     `Время: ${new Date().toISOString()}`,
   ].join("\n");
 
-  try {
-    const telegramResponse = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: chatId, text: message, disable_web_page_preview: true }),
-      signal: AbortSignal.timeout(8000),
-    });
-    const telegramResult = await telegramResponse.json() as { ok?: boolean };
-    if (!telegramResponse.ok || telegramResult.ok !== true) {
-      throw new Error("Telegram API rejected the message");
-    }
-    return Response.json({ ok: true, id }, { status: 201, headers });
-  } catch {
-    console.error("Failed to send Telegram notification");
+  const results = await Promise.allSettled(chatIds.map((chatId) => sendTelegramMessage(token, chatId, message)));
+  const delivered = results.filter((result) => result.status === "fulfilled").length;
+  if (delivered === 0) {
+    console.error("Failed to send Telegram notification to all configured chats");
     return Response.json({ error: "Не удалось отправить заявку. Попробуй ещё раз чуть позже." }, { status: 503, headers });
   }
+  if (delivered < chatIds.length) {
+    console.warn(`Telegram notification delivered to ${delivered} of ${chatIds.length} chats`);
+  }
+
+  return Response.json({ ok: true, id }, { status: 201, headers });
 }
