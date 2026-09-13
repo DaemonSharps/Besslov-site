@@ -21,6 +21,7 @@ app/
   reviews/page.tsx            страница /reviews
   reviews/stories.ts          типы и истории учеников
   api/enquiries/route.ts      POST /api/enquiries и отправка в Telegram
+  api/telegram/webhook/route.ts webhook и команда /chatid
 
 components/
   site-header.tsx             шапка и навигация
@@ -30,6 +31,7 @@ components/
 
 lib/
   enquiry-validation.ts       Zod-схема заявки
+  telegram.ts                 список чатов и отправка сообщений
   utils.ts                    общие функции
 
 public/
@@ -53,25 +55,34 @@ pnpm build
 pnpm lint
 ```
 
-Откройте адрес, который напечатает Next.js (обычно `http://localhost:3000`). Автоматических unit/E2E-тестов нет, поэтому UI-изменения нужно дополнительно проверить вручную на desktop и mobile, включая `/`, `/reviews` и форму.
-
-## Заявки в Telegram
+## Заявки и администраторы Telegram
 
 Браузер отправляет заявку на `POST /api/enquiries`. Сервер проверяет origin, тип и размер запроса, валидирует поля через Zod и вызывает официальный метод Telegram `sendMessage`.
 
-В Vercel добавьте две переменные окружения:
+В Vercel добавьте server-only переменные:
 
 - `TELEGRAM_BOT_TOKEN` — токен, выданный BotFather;
-- `TELEGRAM_CHAT_ID` — ID чата или канала, куда бот может отправлять сообщения.
+- `TELEGRAM_CHAT_IDS` — список ID администраторских чатов через запятую или новую строку, например `123456789,-1001234567890`;
+- `TELEGRAM_WEBHOOK_SECRET` — длинная случайная строка для защиты webhook.
 
-Значения добавляются в Vercel Project Settings → Environment Variables для Production и Preview. Их нельзя помещать в исходники, README, клиентский JavaScript или публичные issue.
+`TELEGRAM_CHAT_ID` поддерживается как обратная совместимость для одного чата, но для нескольких администраторов используйте `TELEGRAM_CHAT_IDS`. Значения добавляются в Vercel Project Settings → Environment Variables для Production и Preview; их нельзя помещать в исходники или клиентский JavaScript.
 
-Перед использованием:
+### Как получить chat ID
 
-1. Создайте бота через @BotFather.
-2. Добавьте бота в нужный чат и выдайте ему право отправлять сообщения.
-3. Узнайте `chat_id` выбранного чата.
-4. Сохраните обе переменные в Vercel и выполните новый deploy.
+1. Добавьте бота в нужный личный или групповой чат.
+2. Напишите боту команду `/chatid`.
+3. Бот ответит ID текущего чата.
+4. Добавьте полученный ID в `TELEGRAM_CHAT_IDS`.
+
+Webhook команды: `https://besslov.vercel.app/api/telegram/webhook`. После добавления переменных задайте webhook, подставив тот же секрет:
+
+```sh
+curl -X POST "https://api.telegram.org/bot<TOKEN>/setWebhook" \
+  -d "url=https://besslov.vercel.app/api/telegram/webhook" \
+  -d "secret_token=<TELEGRAM_WEBHOOK_SECRET>"
+```
+
+Для группы бот должен быть участником и иметь право отправлять сообщения. Одна заявка рассылается во все настроенные чаты; если хотя бы один чат доступен, форма получает успешный ответ, а частичная доставка записывается в server log.
 
 Сообщение содержит имя, контакт, выбранное направление, уровень хаоса, UUID заявки и время отправки. Токен никогда не отправляется в браузер.
 
@@ -92,7 +103,7 @@ pnpm lint
 Ветка production: `main`  
 Сайт: https://besslov.vercel.app
 
-Push в `main` запускает Vercel deploy. Перед отправкой изменений выполните `pnpm build` и `pnpm lint` для затронутых TS/TSX-файлов. Секреты и файлы `.env*`, `.vercel/`, `.next/`, `node_modules/` не коммитятся.
+Push в `main` запускает Vercel deploy. Перед отправкой изменений выполните `pnpm build` и `pnpm lint`. Секреты и файлы `.env*`, `.vercel/`, `.next/`, `node_modules/` не коммитятся.
 
 ## Безопасность
 
