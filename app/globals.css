@@ -45,3 +45,12 @@ h1,h2,h3,.value-card h3,.format-card h3,.shelf-item h3,.story-stage h3,.feedback
 @media(max-width:900px){.fortune-promo-inner{padding-inline:35px}.fortune-promo-copy h2{font-size:clamp(1.9rem,4.8vw,3rem)}.fortune-promo-wheel{width:min(100%,230px)}}
 @media(max-width:600px){.fortune-promo{padding-top:22px}.fortune-promo-inner{grid-template-columns:1fr;gap:24px;padding:31px 24px 35px}.fortune-promo-tape{left:18px;width:130px}.fortune-promo-copy h2{font-size:clamp(2.1rem,10vw,3.1rem)}.fortune-promo-copy p{font-size:14px}.fortune-promo-action{margin-top:17px}.fortune-promo-wheel{width:min(68vw,245px);justify-self:end;margin-right:4px}.fortune-promo-wheel>span:not(.fortune-promo-pointer){width:82px;font-size:24px}}
 @media(prefers-reduced-motion:reduce){.fortune-promo-inner,.fortune-promo-action,.fortune-promo-wheel{transition:none}}
+
+/* Shared vertical rhythm for landing sections and standalone cards */
+:root{--landing-section-space:88px;--landing-section-space-tablet:63px;--landing-section-space-mobile:53px;--landing-card-space:72px;--landing-card-space-tablet:54px;--landing-card-space-mobile:44px}
+.section,.method-section{padding-block:var(--landing-section-space)}
+.fortune-promo{padding-block:0 var(--landing-card-space)}
+.reviews-teaser{padding-block:0 var(--landing-card-space)}
+.cta-section{padding-bottom:var(--landing-card-space)}
+@media(max-width:900px){.section,.method-section{padding-block:var(--landing-section-space-tablet)}.fortune-promo,.reviews-teaser{padding-block:0 var(--landing-card-space-tablet)}.cta-section{padding-bottom:var(--landing-card-space-tablet)}}
+@media(max-width:600px){.section,.method-section{padding-block:var(--landing-section-space-mobile)}.fortune-promo,.reviews-teaser{padding-block:0 var(--landing-card-space-mobile)}.cta-section{padding-bottom:var(--landing-card-space-mobile)}}
