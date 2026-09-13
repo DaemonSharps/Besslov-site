@@ -5,9 +5,9 @@ import Link from "next/link";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { SiteBrand } from "@/components/site-brand";
 
-export function SiteHeader({ onBooking, reviews = false }: { onBooking?: () => void; reviews?: boolean }) {
+export function SiteHeader({ onBooking, reviews = false, fortune = false }: { onBooking?: () => void; reviews?: boolean; fortune?: boolean }) {
   const [mobileNav, setMobileNav] = useState(false);
-  const prefix = reviews ? "/" : "";
+  const prefix = reviews || fortune ? "/" : "";
   return (
     <header className="site-header">
       <div className="header-inner container">
@@ -17,6 +17,7 @@ export function SiteHeader({ onBooking, reviews = false }: { onBooking?: () => v
             <a key={id} onClick={() => setMobileNav(false)} href={`${prefix}#${id}`}>{label}</a>
           ))}
           <a href="/reviews" onClick={() => setMobileNav(false)} aria-current={reviews ? "page" : undefined}>Отзывы</a>
+          <a href="/fortune" onClick={() => setMobileNav(false)} aria-current={fortune ? "page" : undefined}>Рулетка</a>
         </nav>
         {onBooking ? (
           <button className="button button-pink header-cta" onClick={() => { setMobileNav(false); onBooking(); }}>
