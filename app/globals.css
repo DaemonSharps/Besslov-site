@@ -33,3 +33,6 @@
 .hero-note{left:190px;right:auto}
 @media(min-width:601px) and (max-width:900px){.hero-note{left:145px}}
 @media(max-width:600px){.hero-note{left:auto;right:0}}
+
+/* Main headings use the original bold, non-script typeface. */
+h1,h2,h3,.value-card h3,.format-card h3,.shelf-item h3,.story-stage h3,.feedback-intro h3{font-family:'Golos Text',Arial,sans-serif;font-weight:700;}
