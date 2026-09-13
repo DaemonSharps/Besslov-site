@@ -21,7 +21,7 @@ app/
   reviews/page.tsx            страница /reviews
   reviews/stories.ts          типы и истории учеников
   api/enquiries/route.ts      POST /api/enquiries и отправка в Telegram
-  api/telegram/webhook/route.ts webhook и команда /chatid
+  api/telegram/webhook/route.ts webhook и команды /start, /chatid
 
 components/
   site-header.tsx             шапка и навигация
@@ -33,6 +33,8 @@ lib/
   enquiry-validation.ts       Zod-схема заявки
   telegram.ts                 список чатов и отправка сообщений
   utils.ts                    общие функции
+
+instrumentation.ts             регистрация Telegram webhook при старте Node.js
 
 public/
   assets/                     шрифты, изображения и текстуры
@@ -75,7 +77,7 @@ pnpm lint
 4. Бот ответит ID текущего чата.
 5. Добавьте полученный ID в `TELEGRAM_CHAT_IDS`.
 
-Webhook команды: `https://besslov.vercel.app/api/telegram/webhook`. После добавления переменных задайте webhook, подставив тот же секрет:
+Webhook команды: `https://besslov.vercel.app/api/telegram/webhook`. При каждом старте Node.js-приложение автоматически вызывает Telegram `setWebhook` с этим URL и секретом. Для этого достаточно задать переменные окружения и выполнить новый deploy. Если нужен другой HTTPS-адрес, задайте необязательную переменную `TELEGRAM_WEBHOOK_URL`.
 
 ```sh
 curl -X POST "https://api.telegram.org/bot<TOKEN>/setWebhook" \
