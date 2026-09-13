@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ArrowLeft, ArrowUpRight, MessageSquareText } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -52,7 +53,7 @@ export default function ReviewsPage() {
       <main id="main" className="reviews-page">
         <section className="reviews-hero notebook">
           <div className="container">
-            <a className="reviews-back" href="/"><ArrowLeft size={17} aria-hidden="true" /> На главную</a>
+            <Link className="reviews-back" href="/"><ArrowLeft size={17} aria-hidden="true" /> На главную</Link>
             <div className="reviews-intro">
               <div>
                 <span className="eyebrow">ОТЗЫВЫ / ИСТОРИИ УЧЕНИКОВ</span>

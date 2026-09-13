@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { SiteBrand } from "@/components/site-brand";
 
@@ -22,7 +23,7 @@ export function SiteHeader({ onBooking, reviews = false }: { onBooking?: () => v
             Давай знакомиться <ArrowUpRight size={17} />
           </button>
         ) : (
-          <a className="button button-pink header-cta" href="/#contact">Давай знакомиться <ArrowUpRight size={17} /></a>
+          <Link className="button button-pink header-cta" href="/#contact">Давай знакомиться <ArrowUpRight size={17} /></Link>
         )}
         <button className="menu-toggle" onClick={() => setMobileNav(!mobileNav)} aria-controls="site-navigation" aria-expanded={mobileNav} aria-label={mobileNav ? "Закрыть меню" : "Открыть меню"}>
           {mobileNav ? <X /> : <Menu />}
