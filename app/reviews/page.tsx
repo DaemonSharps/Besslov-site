@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowUpRight, MessageSquareText } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
@@ -34,7 +35,15 @@ function Story({ story, index }: { story: StudentStory; index: number }) {
           {story.feedback.text && <blockquote><p>{story.feedback.text}</p></blockquote>}
           {story.feedback.image && (
             <a className="feedback-image-link" href={story.feedback.image.src} target="_blank" rel="noopener noreferrer">
-              <img className="feedback-image" src={story.feedback.image.src} alt={story.feedback.image.alt} loading="lazy" />
+              <Image
+                className="feedback-image"
+                src={story.feedback.image.src}
+                alt={story.feedback.image.alt}
+                width={1200}
+                height={900}
+                sizes="(max-width: 600px) 100vw, 40vw"
+                unoptimized
+              />
               <span>Открыть фото отзыва <ArrowUpRight size={16} aria-hidden="true" /></span>
             </a>
           )}
