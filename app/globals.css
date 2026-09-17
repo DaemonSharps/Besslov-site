@@ -54,3 +54,9 @@ h1,h2,h3,.value-card h3,.format-card h3,.shelf-item h3,.story-stage h3,.feedback
 .cta-section{padding-bottom:var(--landing-card-space)}
 @media(max-width:900px){.section,.method-section{padding-block:var(--landing-section-space-tablet)}.fortune-promo,.reviews-teaser{padding-block:0 var(--landing-card-space-tablet)}.cta-section{padding-bottom:var(--landing-card-space-tablet)}}
 @media(max-width:600px){.section,.method-section{padding-block:var(--landing-section-space-mobile)}.fortune-promo,.reviews-teaser{padding-block:0 var(--landing-card-space-mobile)}.cta-section{padding-bottom:var(--landing-card-space-mobile)}}
+
+/* Keep the study bonus label legible and fully contained in its sticker. */
+.fortune-promo-tape{z-index:3;display:flex;align-items:center;justify-content:center;width:190px;min-height:42px;height:auto;padding:9px 14px;background:repeating-linear-gradient(135deg,#fff6 0 3px,transparent 3px 10px),var(--lime);color:var(--ink);}
+.fortune-promo-tape .eyebrow{color:inherit;white-space:nowrap;}
+.fortune-promo-copy{padding-top:34px;}
+@media(max-width:600px){.fortune-promo-tape{width:190px;min-height:40px;padding-inline:12px;}.fortune-promo-tape .eyebrow{font-size:11px;letter-spacing:.08em}.fortune-promo-copy{padding-top:34px;}}

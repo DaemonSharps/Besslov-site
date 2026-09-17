@@ -104,9 +104,8 @@ export default function Home() {
        </section>
        <section className="fortune-promo container" aria-labelledby="fortune-promo-title">
          <Link className="fortune-promo-inner" href="/fortune">
-           <span className="fortune-promo-tape" aria-hidden="true" />
+           <span className="fortune-promo-tape"><span className="eyebrow">БОНУСЫ ДЛЯ УЧЁБЫ</span></span>
            <div className="fortune-promo-copy">
-             <span className="eyebrow">БОНУСЫ ДЛЯ УЧЁБЫ</span>
              <h2 id="fortune-promo-title">Крути рулетку<br /><span>полезных подарков!</span></h2>
              <p>Шпаргалки, статьи и другие материалы — бесплатно и без регистрации.</p>
              <span className="fortune-promo-action">Крутить рулетку <ArrowUpRight size={19} aria-hidden="true" /></span>
