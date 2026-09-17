@@ -46,6 +46,11 @@ h1,h2,h3,.value-card h3,.format-card h3,.shelf-item h3,.story-stage h3,.feedback
 @media(max-width:600px){.fortune-promo{padding-top:22px}.fortune-promo-inner{grid-template-columns:1fr;gap:24px;padding:31px 24px 35px}.fortune-promo-tape{left:18px;width:130px}.fortune-promo-copy h2{font-size:clamp(2.1rem,10vw,3.1rem)}.fortune-promo-copy p{font-size:14px}.fortune-promo-action{margin-top:17px}.fortune-promo-wheel{width:min(68vw,245px);justify-self:end;margin-right:4px}.fortune-promo-wheel>span:not(.fortune-promo-pointer){width:82px;font-size:24px}}
 @media(prefers-reduced-motion:reduce){.fortune-promo-inner,.fortune-promo-action,.fortune-promo-wheel{transition:none}}
 
+/* Cookie notice */
+.cookie-notice{position:fixed;right:24px;bottom:24px;z-index:60;width:min(360px,calc(100% - 32px));display:flex;align-items:flex-end;gap:18px;padding:17px 18px 17px 20px;border:1px solid #c7bfad;border-radius:14px;background:var(--paper);box-shadow:7px 8px 0 #24231f24}.cookie-notice:before{content:"";position:absolute;left:-1px;top:15px;bottom:15px;width:4px;border-radius:0 4px 4px 0;background:var(--pink)}.cookie-notice p{font-size:13px;line-height:1.45;color:var(--ink)}.cookie-notice-button{flex:0 0 auto;border:0;border-radius:999px;background:var(--pink);color:white;padding:9px 14px;font-size:13px;font-weight:600;line-height:1.2;transition:transform .2s,box-shadow .2s}.cookie-notice-button:hover{transform:translateY(-2px);box-shadow:0 4px 0 #24231f24}.cookie-notice-button:focus-visible{outline:3px solid var(--blue);outline-offset:4px}
+@media(max-width:600px){.cookie-notice{right:16px;bottom:16px;width:calc(100% - 32px);align-items:center;gap:12px;padding:15px 14px 15px 17px}.cookie-notice p{font-size:12px}.cookie-notice-button{padding:9px 12px;white-space:nowrap}}
+@media(prefers-reduced-motion:reduce){.cookie-notice-button{transition:none}}
+
 /* Shared vertical rhythm for landing sections and standalone cards */
 :root{--landing-section-space:88px;--landing-section-space-tablet:63px;--landing-section-space-mobile:53px;--landing-card-space:72px;--landing-card-space-tablet:54px;--landing-card-space-mobile:44px}
 .section,.method-section{padding-block:var(--landing-section-space)}

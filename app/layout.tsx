@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { CookieNotice } from "@/components/cookie-notice";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,7 +18,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        {children}
+        <CookieNotice />
+      </body>
     </html>
   );
 }

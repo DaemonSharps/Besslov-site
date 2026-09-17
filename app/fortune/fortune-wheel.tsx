@@ -2,12 +2,12 @@
 
 import { useEffect, useState, type CSSProperties } from "react";
 import { Check, Download, ExternalLink, RotateCw } from "lucide-react";
+import { REQUIRED_COOKIE } from "@/components/cookie-notice";
 import styles from "./fortune.module.css";
 
 const FORTUNE_COOKIE = "besslov_fortune";
-const CONSENT_COOKIE = "besslov_cookie_consent";
 const SPIN_MAX_AGE = 60 * 60 * 24 * 30;
-const CONSENT_MAX_AGE = 60 * 60 * 24 * 365;
+const REQUIRED_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 
 type Prize = {
   id: string;
@@ -49,16 +49,16 @@ function setCookie(name: string, value: string, maxAge: number) {
 }
 
 export function FortuneWheel() {
-  const [consent, setConsent] = useState<"unknown" | "accepted" | "declined">("unknown");
+  const [cookieReady, setCookieReady] = useState(false);
   const [result, setResult] = useState<Prize | null>(null);
   const [spinning, setSpinning] = useState(false);
   const [rotation, setRotation] = useState(0);
 
   useEffect(() => {
     const syncStoredState = () => {
-      const storedConsent = getCookie(CONSENT_COOKIE);
       const storedPrize = getCookie(FORTUNE_COOKIE);
-      setConsent(storedConsent === "accepted" ? "accepted" : storedConsent === "declined" ? "declined" : "unknown");
+      if (!getCookie(REQUIRED_COOKIE)) setCookie(REQUIRED_COOKIE, "1", REQUIRED_COOKIE_MAX_AGE);
+      setCookieReady(Boolean(getCookie(REQUIRED_COOKIE)));
       if (storedPrize && storedPrize !== "ready") {
         setResult(prizes.find(prize => prize.id === storedPrize) ?? null);
       }
@@ -67,19 +67,8 @@ export function FortuneWheel() {
     return () => window.clearTimeout(syncId);
   }, []);
 
-  function allowCookies() {
-    setCookie(CONSENT_COOKIE, "accepted", CONSENT_MAX_AGE);
-    if (!getCookie(FORTUNE_COOKIE)) setCookie(FORTUNE_COOKIE, "ready", CONSENT_MAX_AGE);
-    setConsent("accepted");
-  }
-
-  function declineCookies() {
-    setCookie(CONSENT_COOKIE, "declined", CONSENT_MAX_AGE);
-    setConsent("declined");
-  }
-
   function spin() {
-    if (consent !== "accepted" || spinning || result) return;
+    if (!cookieReady || spinning || result) return;
 
     const index = Math.floor(Math.random() * prizes.length);
     const prize = prizes[index];
@@ -103,8 +92,8 @@ export function FortuneWheel() {
   }
 
   const wheelStyle: WheelStyle = { "--wheel-rotation": `${rotation}deg` };
-  const canSpin = consent === "accepted" && !spinning && !result;
-  const buttonLabel = result ? "Приз получен" : consent === "declined" ? "Нужны cookie" : "Крутить!";
+  const canSpin = cookieReady && !spinning && !result;
+  const buttonLabel = result ? "Приз получен" : cookieReady ? "Крутить!" : "Нужны cookie";
 
   return (
     <div className={styles.wheelColumn}>
@@ -130,7 +119,7 @@ export function FortuneWheel() {
       </div>
 
       <p className={styles.wheelHint} aria-live="polite">
-        {spinning ? "Колесо выбирает твой бонус…" : result ? "Попытка использована. Загляни за призом ниже." : consent === "declined" ? "Разреши cookie, чтобы крутить рулетку." : "Нажми на центр колеса — попытка только одна."}
+        {spinning ? "Колесо выбирает твой бонус…" : result ? "Попытка использована. Загляни за призом ниже." : cookieReady ? "Нажми на центр колеса — попытка только одна." : "Подожди, пока включатся обязательные cookie."}
       </p>
 
       {result && (
@@ -150,18 +139,6 @@ export function FortuneWheel() {
         </section>
       )}
 
-      {consent !== "accepted" && (
-        <aside className={styles.cookieBanner} role="dialog" aria-label="Настройки cookie">
-          <div>
-            <strong>Можно использовать cookie?</strong>
-            <p>Они нужны, чтобы запомнить твою попытку и не дать крутить рулетку повторно в течение 30 дней.</p>
-          </div>
-          <div className={styles.cookieActions}>
-            <button className="button button-pink" type="button" onClick={allowCookies}>Разрешить</button>
-            <button className={styles.declineButton} type="button" onClick={declineCookies}>Не разрешать</button>
-          </div>
-        </aside>
-      )}
     </div>
   );
 }
