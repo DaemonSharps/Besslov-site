@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { CookieNotice } from "@/components/cookie-notice";
+import { BookingProvider } from "@/components/booking-shell";
 import "./globals.css";
 
 const golos = localFont({
@@ -39,7 +40,7 @@ export default function RootLayout({
   return (
     <html lang="ru" className={`${golos.variable} ${caveat.variable}`}>
       <body className="antialiased">
-        {children}
+        <BookingProvider>{children}</BookingProvider>
         <CookieNotice />
       </body>
     </html>
