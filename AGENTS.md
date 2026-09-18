@@ -35,7 +35,7 @@ pnpm lint
 - `components/` — site chrome и UI-примитивы.
 - `lib/telegram.ts` — разбор списка администраторских chat ID и вызов Telegram API.
 - `lib/` — Zod-схема заявки и утилиты.
-- `public/assets/` — изображения и локальные шрифты.
+- `public/assets/` — изображения; `app/fonts/` — локальные шрифты, подключаемые через `next/font/local`.
 - `app/globals.css` — токены, типографика и responsive rules.
 
 Используйте App Router и alias `@/*`. По умолчанию создавайте Server Components; `"use client"` добавляйте только для state, effects, events или browser API.
@@ -68,7 +68,7 @@ Webhook находится по адресу `/api/telegram/webhook`. При к�
 - Заголовки и основной текст используют Golos Text.
 - Caveat оставлен только для декоративных рукописных акцентов и логотипа.
 - Balsamiq Sans запрещён и не должен возвращаться в CSS, assets или dependencies.
-- Для `.woff2` в `public/assets/fonts.css` используйте `format('woff2')`.
+- Локальные `.woff2` подключайте через `next/font/local`, а не через глобальные CSS imports.
 - Используйте CSS tokens `--pink`, `--lime`, `--blue`, `--ink`, `--paper`; не размножайте произвольные цвета.
 - Сохраняйте focus-visible, aria labels, keyboard access и alt text.
 - Новые истории должны сохранять четыре смысловых этапа: старт, разбор ситуации, подготовка, результат; визуальных шагов внутри этапов может быть переменное количество. Демо-истории разрешены только в development при явном opt-in и не должны попадать в production payload. Реальные фотографии и цитаты требуют разрешения.
