@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Gift, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { FortuneWheel } from "./fortune-wheel";
@@ -30,7 +30,6 @@ export default function FortunePage() {
               </p>
               <div className={styles.heroNotes}>
                 <span><Sparkles size={18} aria-hidden="true" /> Полезное для 8–11 классов</span>
-                <span><Gift size={18} aria-hidden="true" /> Один бонус на 30 дней</span>
               </div>
             </div>
             <FortuneWheel />
