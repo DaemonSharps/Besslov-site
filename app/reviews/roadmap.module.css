@@ -1,0 +1,286 @@
+.page {
+  min-height: 70vh;
+  overflow: hidden;
+}
+
+.hero {
+  padding: clamp(74px, 9vw, 132px) 0 clamp(82px, 10vw, 148px);
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 15%, var(--paper));
+}
+
+.hero h1 {
+  max-width: 100%;
+  margin: 0;
+  color: var(--ink);
+  font-family: 'Golos Text', Arial, sans-serif;
+  font-size: clamp(3.35rem, 7vw, 7.25rem);
+  font-weight: 700;
+  line-height: .95;
+  letter-spacing: -.07em;
+  white-space: nowrap;
+}
+
+.section {
+  padding-top: clamp(78px, 10vw, 142px);
+  padding-bottom: clamp(88px, 11vw, 154px);
+}
+
+.list {
+  display: grid;
+  gap: clamp(110px, 14vw, 190px);
+}
+
+.item {
+  position: relative;
+}
+
+.story {
+  position: relative;
+}
+
+.header {
+  max-width: 760px;
+  margin-bottom: clamp(44px, 7vw, 82px);
+}
+
+.context {
+  display: inline-block;
+  margin-bottom: 18px;
+  color: var(--pink);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+
+.header h2 {
+  max-width: 740px;
+  font-family: 'Golos Text', Arial, sans-serif;
+  font-size: clamp(2.2rem, 5vw, 5rem);
+  line-height: .98;
+  letter-spacing: -.06em;
+}
+
+.header p {
+  margin-top: 20px;
+  color: var(--blue);
+  font-family: var(--script);
+  font-size: 27px;
+  transform: rotate(-3deg);
+  transform-origin: left;
+}
+
+.roadmap {
+  position: relative;
+  min-height: 420px;
+  padding: 10px clamp(34px, 10vw, 150px) 20px;
+}
+
+.line {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.line path {
+  fill: none;
+  stroke: var(--pink);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: .02 .98;
+  animation: draw 1.7s cubic-bezier(.22, .75, .25, 1) forwards;
+}
+
+@keyframes draw {
+  to { stroke-dasharray: 1 0; }
+}
+
+.steps {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 38px 0;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.step {
+  position: relative;
+  grid-column: span 5;
+  min-width: 0;
+  padding: 24px 27px 25px;
+  border: 1px solid color-mix(in srgb, var(--ink) 22%, var(--paper));
+  border-radius: 20px 7px 20px 7px;
+  background: var(--paper);
+  box-shadow: 8px 9px 0 color-mix(in srgb, var(--ink) 10%, transparent);
+}
+
+.step:nth-child(2) { grid-column: 7 / span 5; margin-top: 64px; }
+.step:nth-child(3) { grid-column: 3 / span 5; margin-top: 20px; }
+.step:nth-child(4) { grid-column: 8 / span 5; margin-top: 72px; }
+.step:nth-child(5) { grid-column: 2 / span 5; margin-top: 18px; }
+.step:nth-child(6) { grid-column: 7 / span 5; margin-top: 64px; }
+
+.step:nth-child(odd) { border-radius: 7px 20px 7px 20px; }
+.step:nth-child(3n) { background: var(--lime); border-color: var(--lime); }
+.step.result { background: var(--blue); border-color: var(--blue); color: white; }
+.step.result p { color: white; }
+
+.anchor {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  left: -42px;
+  width: 16px;
+  height: 16px;
+  border: 3px solid var(--paper);
+  border-radius: 50%;
+  background: var(--pink);
+  box-shadow: 0 0 0 2px var(--pink);
+  transform: translateY(-50%);
+}
+
+.step:nth-child(2n) .anchor { left: auto; right: -42px; }
+.analysis .anchor { background: var(--lime); box-shadow: 0 0 0 2px var(--lime); }
+.preparation .anchor { background: var(--blue); box-shadow: 0 0 0 2px var(--blue); }
+.result .anchor { background: var(--paper); box-shadow: 0 0 0 2px var(--blue); }
+
+.phase {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--pink);
+  font-family: var(--script);
+  font-size: 21px;
+  line-height: 1;
+}
+
+.analysis .phase { color: var(--ink); }
+.preparation .phase { color: var(--blue); }
+.result .phase { color: var(--lime); }
+.step h3 { font-size: clamp(1.15rem, 1.7vw, 1.45rem); line-height: 1.2; }
+.step p { margin-top: 8px; font-size: 15px; line-height: 1.62; }
+
+/* Second story travels in two clear lanes; third uses smaller stepping stones. */
+.story1 .roadmap { padding-inline: clamp(42px, 12vw, 190px); }
+.story1 .steps { grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 28px 0; }
+.story1 .step { grid-column: 1 / span 4; width: 100%; }
+.story1 .step:nth-child(2n) { grid-column: 7 / span 4; margin-top: 42px; }
+.story1 .step:nth-child(3n) { grid-column: 3 / span 4; margin-top: 16px; }
+.story1 .step:nth-child(4n) { grid-column: 8 / span 3; margin-top: 55px; }
+.story1 .step:nth-child(2n) .anchor { left: -42px; right: auto; }
+.story1 .step:nth-child(odd) .anchor { left: auto; right: -42px; }
+
+.story2 .roadmap { padding-inline: clamp(28px, 8vw, 115px); }
+.story2 .steps { grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 63px 0; }
+.story2 .step { grid-column: 2 / span 3; width: 100%; border-radius: 45% 14px 45% 14px; }
+.story2 .step:nth-child(2n) { grid-column: 7 / span 3; margin-top: 52px; }
+.story2 .step:nth-child(3n) { grid-column: 4 / span 3; margin-top: 8px; }
+.story2 .step:nth-child(4n) { grid-column: 8 / span 3; margin-top: 45px; }
+.story2 .step:nth-child(2n) .anchor { left: -42px; right: auto; }
+.story2 .step:nth-child(odd) .anchor { left: auto; right: -42px; }
+
+.review-feedback {
+  width: min(540px, 100%);
+  margin: 36px 5% 0 auto;
+  padding: 30px 32px 27px;
+  border: 1px solid color-mix(in srgb, var(--ink) 20%, var(--paper));
+  background: color-mix(in srgb, var(--pink) 12%, var(--paper));
+  box-shadow: 8px 9px 0 color-mix(in srgb, var(--ink) 10%, transparent);
+  transform: rotate(-1.5deg);
+}
+
+.feedbackLabel { color: var(--pink); font-family: var(--script); font-size: 27px; font-weight: 700; }
+.review-feedback blockquote { margin: 17px 0 18px; }
+.review-feedback blockquote p { color: var(--ink); font-size: 15px; line-height: 1.65; }
+.review-feedback blockquote p + p { margin-top: 15px; }
+.cite { color: var(--ink); font-size: 12px; font-style: normal; }
+.demoFlag { position: absolute; top: -28px; right: 0; z-index: 4; padding: 6px 12px; background: var(--pink); color: white; font-size: 11px; font-weight: 700; letter-spacing: .06em; transform: rotate(2deg); }
+
+@media (max-width: 900px) {
+  .hero {
+    padding-top: 72px;
+    padding-bottom: 88px;
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 8.2vw, 5.8rem);
+  }
+
+  .section {
+    padding-top: 68px;
+    padding-bottom: 96px;
+  }
+
+  .header h2 { font-size: clamp(2.5rem, 7vw, 4rem); }
+  .roadmap,
+  .story1 .roadmap,
+  .story2 .roadmap {
+    min-height: 0;
+    padding-right: 34px;
+    padding-left: 34px;
+  }
+  .steps, .story1 .steps, .story2 .steps { display: grid; grid-template-columns: 1fr; gap: 30px; }
+  .step, .story1 .step, .story2 .step,
+  .step:nth-child(n), .story1 .step:nth-child(n), .story2 .step:nth-child(n) {
+    grid-column: 1;
+    width: min(100%, 560px);
+    margin: 0;
+  }
+  .story1 .step:nth-child(even), .story2 .step:nth-child(even) { margin-left: 34px; }
+  .story2 .step:nth-child(odd) { margin-left: 14px; }
+  .anchor, .step:nth-child(2n) .anchor,
+  .story1 .step:nth-child(2n) .anchor, .story1 .step:nth-child(odd) .anchor,
+  .story2 .step:nth-child(2n) .anchor, .story2 .step:nth-child(odd) .anchor {
+    left: -26px;
+    right: auto;
+  }
+  .review-feedback { margin-right: 0; }
+}
+
+@media (max-width: 600px) {
+  .hero {
+    padding-top: 58px;
+    padding-bottom: 72px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.2rem, 10.8vw, 4.3rem);
+    letter-spacing: -.065em;
+  }
+
+  .section {
+    padding-top: 56px;
+    padding-bottom: 76px;
+  }
+
+  .header h2 { font-size: clamp(2.35rem, 11.2vw, 3.6rem); }
+  .roadmap,
+  .story1 .roadmap,
+  .story2 .roadmap {
+    padding-right: 27px;
+    padding-left: 27px;
+  }
+  .step, .story1 .step, .story2 .step,
+  .step:nth-child(n), .story1 .step:nth-child(n), .story2 .step:nth-child(n) { width: calc(100% - 10px); }
+  .story1 .step:nth-child(even) { margin-left: 10px; }
+  .story2 .step:nth-child(odd) { margin-left: 6px; }
+  .story2 .step:nth-child(even) { margin-left: 10px; }
+  .anchor, .step:nth-child(2n) .anchor { left: -21px; width: 13px; height: 13px; }
+  .step { padding: 19px 18px 21px; }
+  .phase { font-size: 19px; }
+  .step h3 { font-size: 19px; }
+  .review-feedback { width: calc(100% - 8px); margin-right: 8px; padding: 27px 21px 23px; }
+  .demoFlag { position: relative; top: auto; right: auto; display: table; margin: 0 0 24px auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .line path { animation: none; stroke-dasharray: none; }
+  .review-feedback { transform: none; }
+}

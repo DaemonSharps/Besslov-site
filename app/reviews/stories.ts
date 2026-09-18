@@ -1,26 +1,58 @@
-export const storyStages = [
-  { key: "start", number: "01", title: "С чем пришли", description: "Точка старта: что вызывало трудности и какую цель поставил ученик." },
-  { key: "analysis", number: "02", title: "Разобрались в ситуации", description: "Что показал разбор знаний и работ, с чего решили начать и почему." },
-  { key: "preparation", number: "03", title: "Готовились к работам", description: "Как проходили занятия, что практиковали и как разбирали ошибки." },
-  { key: "result", number: "04", title: "К чему пришли", description: "Что изменилось: результаты работ, самостоятельность и отношение к предмету." },
-] as const;
+export type StoryPhase = "start" | "analysis" | "preparation" | "result";
+
+export type StoryStep = {
+  phase: StoryPhase;
+  title: string;
+  text: string;
+};
 
 type Feedback = {
   author: string;
-} & (
-  | { text: string; image?: { src: string; alt: string } }
-  | { text?: string; image: { src: string; alt: string } }
-);
+  text?: string;
+};
 
 export type StudentStory = {
   id: string;
   title: string;
   student: string;
   context: string;
-  stages: Record<(typeof storyStages)[number]["key"], string>;
+  steps: StoryStep[];
   feedback: Feedback;
+  isDemo?: boolean;
 };
 
-// Add only teacher-supplied stories and original feedback here.
-// No student cases or testimonials have been supplied for publication yet.
-export const studentStories: StudentStory[] = [];
+// Здесь только материалы, переданные владельцем сайта. Четыре фазы сохраняются
+// в смысле пути, но внутри каждой истории шагов может быть больше или меньше.
+export const studentStories: StudentStory[] = [
+  {
+    id: "oge-basics",
+    title: "Сначала нужно было разобраться в самой базе",
+    student: "Ученик · ОГЭ",
+    context: "русский язык",
+    steps: [
+      { phase: "start", title: "Пришёл с путаницей", text: "Не было знаний русского языка: прилагательное и наречие было трудно отличить друг от друга." },
+      { phase: "analysis", title: "Начали с основ", text: "Сначала выстроили базовые темы — чтобы новые правила было на что опереть." },
+      { phase: "preparation", title: "Разобрали темы по очереди", text: "Постепенно проходили темы через красочные презентации." },
+      { phase: "preparation", title: "Подстроили занятия", text: "Темы разбирали постепенно, с персональным подходом к ученику." },
+      { phase: "result", title: "ОГЭ — 4, близко к 5", text: "Ученик сдал ОГЭ на 4 — с оглядкой на 5." },
+    ],
+    feedback: { author: "Ученик · ОГЭ" },
+  },
+  {
+    id: "russian-easier",
+    title: "Русский стал даваться в разы легче",
+    student: "Ученица · русский язык",
+    context: "отзыв ученицы",
+    steps: [
+      { phase: "start", title: "Начинали с базы", text: "На первом уроке хотелось хотя бы сдать. Базы почти не было." },
+      { phase: "analysis", title: "Ошибаться стало не страшно", text: "На уроках можно спокойно переспросить, если что-то непонятно, и не бояться ошибки." },
+      { phase: "preparation", title: "На уроках стало спокойнее", text: "Интересные уроки и понятные объяснения оставили место для вопросов и ошибок." },
+      { phase: "preparation", title: "Презентации, сделанные с заботой", text: "В презентациях было видно, сколько сил и любви вложено в занятия." },
+      { phase: "result", title: "Стало легче", text: "Теперь русский даётся в разы легче, а в уроках чувствуется много вложенных сил и любви." },
+    ],
+    feedback: {
+      author: "Ученица",
+      text: "Мне очень комфортно заниматься с вами, всегда интересные уроки, не страшно ошибаться или переспрашивать, если не понятно.\n\nОчень понятно объясняете материал, я когда пришла на первый урок думала о том, чтобы хотя бы сдать, не говоря о пятерке. Я не знала даже базы, а теперь говорю, что русский дается в разы легче, благодаря вам🥺\n\nА еще мне нравятся ваши презентации к урокам, потому что видно, как в них много вложено сил и любви.\n\nИ вообще лучше репетитора по русскому точно нет 🙃",
+    },
+  },
+];
