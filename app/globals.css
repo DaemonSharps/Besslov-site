@@ -19,12 +19,12 @@
 /* Stories and feedback */
 .brand{gap:0}.brand-name{letter-spacing:-1.6px}.reviews-teaser{padding:0 0 72px}.reviews-teaser-inner{display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:center;padding:39px 45px;border:1px solid #ccc6b8;border-radius:13px;background:#f8e7dc;position:relative;overflow:hidden}.reviews-teaser-inner:after{content:"";position:absolute;right:6%;top:-36px;width:155px;height:155px;border:3px solid var(--pink);border-radius:48% 52% 45% 55%;transform:rotate(-21deg);opacity:.85}.reviews-teaser h2{font-size:43px;position:relative;z-index:1}.reviews-teaser h2 span{color:var(--pink);font-family:var(--script);display:inline-block;transform:rotate(-3deg)}.reviews-teaser .eyebrow{margin-bottom:12px}.reviews-teaser-copy{position:relative;z-index:1}.reviews-teaser-copy p{font-size:16px;line-height:1.75;max-width:430px}.reviews-teaser-copy .button{margin-top:22px;min-height:48px}
 
-/* Keep the original reference portrait and its identity unchanged. */
-.portrait-frame{inset:auto;left:0;top:10px;width:min(100%,400px);height:auto;aspect-ratio:332 / 472;background-size:259.6386% 386.6525%;background-position:81.5094% 5.3954%;clip-path:polygon(25% 0,76% 0,80% 15%,96% 29%,100% 64%,95% 100%,0 100%,0 66%,13% 21%)}
-@media(min-width:1440px){.portrait-frame{width:415px}}
-@media(min-width:601px) and (max-width:900px){.portrait-frame{width:330px;max-width:105%;left:-4px}}
-@media(max-width:600px){.portrait-frame{width:310px;max-width:100%;left:50%;transform:translateX(-50%)}}
-@media(max-width:360px){.portrait-frame{width:292px}}
+/* Frame the seated portrait without losing the face or book at any breakpoint. */
+.portrait-frame{inset:auto;left:0;top:10px;width:min(100%,400px);height:auto;aspect-ratio:332 / 472;background-image:url('/assets/photo_2026-06-24_01-07-47.jpg');background-repeat:no-repeat;background-size:cover;background-position:center center;clip-path:polygon(25% 0,76% 0,80% 15%,96% 29%,100% 64%,95% 100%,0 100%,0 66%,13% 21%)}
+@media(min-width:1440px){.portrait-frame{width:415px;background-position:center center}}
+@media(min-width:601px) and (max-width:900px){.portrait-frame{width:330px;max-width:105%;left:-4px;background-position:center center}}
+@media(max-width:600px){.portrait-frame{width:310px;max-width:100%;left:50%;transform:translateX(-50%);background-position:center center}}
+@media(max-width:360px){.portrait-frame{width:292px;background-position:center center}}
 
 .hero-note{left:190px;right:auto}
 @media(min-width:601px) and (max-width:900px){.hero-note{left:145px}}
