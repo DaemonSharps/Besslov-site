@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { FortuneWheel } from "./fortune-wheel";
 import styles from "./fortune.module.css";
+import { ScrollReveal } from "@/components/scroll-reveal";
 
 export const metadata: Metadata = {
   title: "Рулетка бонусов — бесслов",
@@ -17,7 +18,7 @@ export default function FortunePage() {
       <a className="skip-link" href="#main">Перейти к содержанию</a>
       <SiteHeader fortune />
       <main id="main" className={styles.page}>
-        <section className={`notebook ${styles.hero}`}>
+        <ScrollReveal><section className={`notebook ${styles.hero}`}>
           <div className={`container ${styles.heroInner}`}>
             <div className={styles.heroCopy}>
               <Link className={styles.backLink} href="/">← На главную</Link>
@@ -34,9 +35,9 @@ export default function FortunePage() {
             </div>
             <FortuneWheel />
           </div>
-        </section>
+        </section></ScrollReveal>
 
-        <section className={`container ${styles.prizesSection}`} aria-labelledby="prizes-title">
+        <ScrollReveal><section className={`container ${styles.prizesSection}`} aria-labelledby="prizes-title">
           <div className={styles.sectionHeading}>
             <div>
               <span className="eyebrow">ЧТО МОЖЕТ ВЫПАСТЬ</span>
@@ -60,7 +61,7 @@ export default function FortunePage() {
               </article>
             ))}
           </div>
-        </section>
+        </section></ScrollReveal>
       </main>
       <SiteFooter />
     </>

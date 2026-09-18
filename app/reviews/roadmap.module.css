@@ -117,7 +117,57 @@
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-dasharray: .02 .98;
-  animation: draw 1.7s cubic-bezier(.22, .75, .25, 1) forwards;
+  animation: draw .5667s cubic-bezier(.22, .75, .25, 1) forwards;
+}
+
+/* The cards stay measured in their final positions; only opacity is animated. */
+.roadmap[data-reveal-ready="true"]:not([data-revealed="true"]) .step,
+.roadmap[data-reveal-ready="true"]:not([data-revealed="true"]) .line path,
+.roadmap[data-reveal-ready="true"]:not([data-revealed="true"]) .line circle {
+  opacity: 0;
+}
+.roadmap[data-reveal-ready="true"]:not([data-revealed="true"]) .line path {
+  animation: none;
+  stroke-dasharray: .02 .98;
+}
+
+.roadmap[data-revealed="true"] .step {
+  animation: story-step-in 140ms ease-out 0s both;
+}
+.roadmap[data-revealed="true"] .step:nth-child(2),
+.roadmap[data-revealed="true"] .step:nth-child(3),
+.roadmap[data-revealed="true"] .step:nth-child(4),
+.roadmap[data-revealed="true"] .step:nth-child(5),
+.roadmap[data-revealed="true"] .step:nth-child(6) { animation-delay: 0s; }
+.roadmap[data-revealed="true"] .line path { animation-delay: .1933s; }
+.roadmap[data-revealed="true"] .line path:nth-of-type(2) { animation-delay: .5767s; }
+.roadmap[data-revealed="true"] .line path:nth-of-type(3) { animation-delay: .96s; }
+.roadmap[data-revealed="true"] .line path:nth-of-type(4) { animation-delay: 1.3433s; }
+.roadmap[data-revealed="true"] .line path:nth-of-type(5) { animation-delay: 1.7267s; }
+.roadmap[data-revealed="true"] .line circle {
+  opacity: 0;
+  animation: marker-in 73.333ms ease-out both;
+}
+/* Circles are emitted in start/end pairs for each connection. */
+.roadmap[data-revealed="true"] .line circle:nth-of-type(1) { animation-delay: .16s; }
+.roadmap[data-revealed="true"] .line circle:nth-of-type(2) { animation-delay: .34s; }
+.roadmap[data-revealed="true"] .line circle:nth-of-type(3) { animation-delay: .5433s; }
+.roadmap[data-revealed="true"] .line circle:nth-of-type(4) { animation-delay: .7233s; }
+.roadmap[data-revealed="true"] .line circle:nth-of-type(5) { animation-delay: .9267s; }
+.roadmap[data-revealed="true"] .line circle:nth-of-type(6) { animation-delay: 1.1067s; }
+.roadmap[data-revealed="true"] .line circle:nth-of-type(7) { animation-delay: 1.31s; }
+.roadmap[data-revealed="true"] .line circle:nth-of-type(8) { animation-delay: 1.49s; }
+.roadmap[data-revealed="true"] .line circle:nth-of-type(9) { animation-delay: 1.6933s; }
+.roadmap[data-revealed="true"] .line circle:nth-of-type(10) { animation-delay: 1.8733s; }
+
+@keyframes story-step-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes marker-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes draw {
@@ -267,6 +317,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .roadmap[data-reveal-ready="true"] .step,
+  .roadmap[data-reveal-ready="true"] .line path,
+  .roadmap[data-reveal-ready="true"] .line circle { opacity: 1; animation: none; }
   .line path { animation: none; stroke-dasharray: none; }
   .review-feedback { transform: none; }
 }

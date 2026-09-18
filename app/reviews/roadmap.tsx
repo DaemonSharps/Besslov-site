@@ -177,6 +177,8 @@ function StoryRoadmap({ story, index }: { story: StudentStory; index: number }) 
     const roadmap = roadmapRef.current;
     if (!roadmap) return;
 
+    roadmap.dataset.revealReady = "true";
+
     let disposed = false;
     let frame: number | null = null;
     const measure = () => {
@@ -198,11 +200,21 @@ function StoryRoadmap({ story, index }: { story: StudentStory; index: number }) 
     };
 
     scheduleMeasure();
-    const observer = new ResizeObserver(scheduleMeasure);
+    const resizeObserver = new ResizeObserver(scheduleMeasure);
     const list = roadmap.querySelector<HTMLOListElement>("ol");
-    observer.observe(roadmap);
-    if (list) observer.observe(list);
-    roadmap.querySelectorAll<HTMLElement>("[data-roadmap-step]").forEach((element) => observer.observe(element));
+    resizeObserver.observe(roadmap);
+    if (list) resizeObserver.observe(list);
+    roadmap.querySelectorAll<HTMLElement>("[data-roadmap-step]").forEach((element) => resizeObserver.observe(element));
+    const viewObserver = typeof IntersectionObserver === "undefined" ? null : new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      roadmap.dataset.revealed = "true";
+      viewObserver?.disconnect();
+    }, { threshold: 0.16, rootMargin: "0px 0px -8%" });
+    if (!viewObserver) {
+      roadmap.dataset.revealed = "true";
+    } else {
+      viewObserver?.observe(roadmap);
+    }
     window.addEventListener("resize", scheduleMeasure);
 
     if (document.fonts) {
@@ -213,7 +225,8 @@ function StoryRoadmap({ story, index }: { story: StudentStory; index: number }) 
 
     return () => {
       disposed = true;
-      observer.disconnect();
+      resizeObserver.disconnect();
+      viewObserver?.disconnect();
       if (frame !== null) window.cancelAnimationFrame(frame);
       window.removeEventListener("resize", scheduleMeasure);
     };
