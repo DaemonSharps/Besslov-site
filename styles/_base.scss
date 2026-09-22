@@ -31,7 +31,15 @@ html {
 }
 body {
   margin: 0;
-  background: var(--paper);
+  background-color: var(--paper);
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 36px,
+    #e6dfd05e 36px,
+    #e6dfd05e 37px
+  );
+  background-repeat: repeat;
   color: var(--ink);
   font-family: var(--font-body);
   font-size: 16px;

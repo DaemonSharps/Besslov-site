@@ -1,11 +1,5 @@
 ﻿.notebook {
-  background-image: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 36px,
-    #e6dfd05e 36px,
-    #e6dfd05e 37px
-  );
+  background-image: none;
 }
 .hero {
   border-bottom: 1px solid #ddd8cc;
@@ -362,7 +356,7 @@ mark {
   padding: 21px 25px 29px;
   border: 1px solid #cfc9bf;
   border-radius: 9px;
-  background: #fffcf54d;
+  background: #fffcf5;
   transition: transform 0.2s;
 }
 .value-card:hover {
