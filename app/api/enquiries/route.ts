@@ -33,6 +33,10 @@ export async function POST(request: Request) {
     );
   }
 
+  if (process.env.NODE_ENV === "development") {
+    return Response.json({ ok: true, id: value.data.id }, { status: 201, headers });
+  }
+
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatIds = getTelegramChatIds();
   if (!token || chatIds.length === 0) {

@@ -11,9 +11,79 @@ const subjectOptions = ["Русский язык", "Литература", "ЕГ
 type Subject = (typeof subjectOptions)[number];
 const chaosOptions = ["Полный хаос", "Есть вопросы", "Почти порядок"];
 const formats = ["Русский язык", "Литература", "ЕГЭ / ОГЭ", "Сочинения и пробники"];
+const FORTUNE_COOKIE = "besslov_fortune";
+
+function setCaret(input: HTMLInputElement, position: number) {
+  window.requestAnimationFrame(() => {
+    if (document.activeElement === input) input.setSelectionRange(position, position);
+  });
+}
+
+function phoneDigits(value: string) {
+  const digits = value.replace(/\D/g, "");
+  if (!digits) return "";
+  const normalized = digits[0] === "8" ? `7${digits.slice(1)}` : digits[0] === "7" ? digits : `7${digits}`;
+  return normalized.slice(0, 11);
+}
+
+function formatPhone(digits: string) {
+  if (!digits) return "";
+  const local = digits.slice(1);
+  let formatted = "+7";
+  if (local) formatted += ` (${local.slice(0, 3)}`;
+  if (local.length >= 3) formatted += ")";
+  if (local.length > 3) formatted += ` ${local.slice(3, 6)}`;
+  if (local.length > 6) formatted += `-${local.slice(6, 8)}`;
+  if (local.length > 8) formatted += `-${local.slice(8, 10)}`;
+  return formatted;
+}
+
+function caretAfterDigits(value: string, count: number) {
+  if (!count) return 0;
+  let seen = 0;
+  for (let index = 0; index < value.length; index += 1) {
+    if (/\d/.test(value[index])) {
+      seen += 1;
+      if (seen === count) return index + 1;
+    }
+  }
+  return value.length;
+}
+
+function handlePhoneChange(input: HTMLInputElement, onChange: (value: string) => void) {
+  const cursor = input.selectionStart ?? input.value.length;
+  const digitsBeforeCursor = input.value.slice(0, cursor).replace(/\D/g, "");
+  const formatted = formatPhone(phoneDigits(input.value));
+  onChange(formatted);
+  setCaret(input, caretAfterDigits(formatted, Math.min(digitsBeforeCursor.length, formatted.replace(/\D/g, "").length)));
+}
+
+function handleTelegramChange(input: HTMLInputElement, onChange: (value: string) => void) {
+  const cursor = input.selectionStart ?? input.value.length;
+  const sanitizeUsername = (value: string) => value.replace(/^@/, "").replace(/[^A-Za-z0-9_]/g, "").replace(/^[^A-Za-z]*/, "");
+  const validBeforeCursor = sanitizeUsername(input.value.slice(0, cursor));
+  const username = sanitizeUsername(input.value).slice(0, 32);
+  const formatted = username ? `@${username}` : "";
+  onChange(formatted);
+  setCaret(input, formatted ? 1 + Math.min(validBeforeCursor.length, username.length) : 0);
+}
+const FORTUNE_ATTEMPTS_KEY = "besslov_fortune_attempts";
+const FORTUNE_RESET_EVENT = "besslov:fortune-reset";
 
 type BookingContextValue = { startBooking: (selected?: string) => void };
 const BookingContext = createContext<BookingContextValue | null>(null);
+
+function getCookie(name: string) {
+  const prefix = `${name}=`;
+  const value = document.cookie.split("; ").find(cookie => cookie.startsWith(prefix))?.slice(prefix.length);
+  if (!value) return null;
+  try { return decodeURIComponent(value); } catch { return null; }
+}
+
+function normalizeAttempts(value: string | null) {
+  const attempts = value === null ? null : Number(value);
+  return attempts !== null && Number.isInteger(attempts) && attempts >= 0 && attempts <= 2 ? attempts : null;
+}
 
 export function useBooking() {
   const context = useContext(BookingContext);
@@ -26,6 +96,7 @@ export function BookingProvider({ children }: { children: ReactNode }) {
   const [subjects, setSubjects] = useState<Subject[]>([]), [chaos, setChaos] = useState("Есть вопросы");
   const [name, setName] = useState(""), [phone, setPhone] = useState(""), [telegram, setTelegram] = useState(""), [details, setDetails] = useState(""), [consent, setConsent] = useState(false);
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle"), [error, setError] = useState("");
+  const [fortuneNotice, setFortuneNotice] = useState(false);
   const requestId = useRef(""), lastTrigger = useRef<HTMLElement | null>(null);
 
   function startBooking(selected = "Помогите выбрать") {
@@ -53,6 +124,12 @@ export function BookingProvider({ children }: { children: ReactNode }) {
     return () => lifecycle.abort();
   }, []);
 
+  useEffect(() => {
+    if (!fortuneNotice) return;
+    const timeout = window.setTimeout(() => setFortuneNotice(false), 5000);
+    return () => window.clearTimeout(timeout);
+  }, [fortuneNotice]);
+
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); if (status === "sending") return;
     if (!phone.trim() && !telegram.trim()) { setError("Укажи номер телефона или ник в Telegram — достаточно одного контакта."); return; }
@@ -64,6 +141,14 @@ export function BookingProvider({ children }: { children: ReactNode }) {
       const result = await response.json() as {error?: string; ok?: boolean};
       if (!response.ok || result.ok !== true) throw new Error(result.error || "Не получилось отправить заявку. Попробуй ещё раз.");
       setStatus("success"); requestId.current=""; setName(""); setPhone(""); setTelegram(""); setDetails(""); setSubjects([]); setConsent(false);
+      const storedAttempts = normalizeAttempts(window.localStorage.getItem(FORTUNE_ATTEMPTS_KEY));
+      const legacyCookie = getCookie(FORTUNE_COOKIE);
+      const legacyAttempts = legacyCookie && legacyCookie !== "ready" ? 0 : 1;
+      const nextAttempts = Math.min(2, (storedAttempts ?? legacyAttempts) + 1);
+      window.localStorage.setItem(FORTUNE_ATTEMPTS_KEY, String(nextAttempts));
+      document.cookie = `${FORTUNE_COOKIE}=; Path=/; Max-Age=0; SameSite=Lax${window.location.protocol === "https:" ? "; Secure" : ""}`;
+      window.dispatchEvent(new CustomEvent(FORTUNE_RESET_EVENT, {detail:{attempts:nextAttempts}}));
+      setFortuneNotice(true);
     } catch (submissionError) { setStatus("error"); setError(submissionError instanceof Error ? submissionError.message : "Проверь соединение и попробуй ещё раз."); }
   }
 
@@ -75,7 +160,7 @@ export function BookingProvider({ children }: { children: ReactNode }) {
         <span className="eyebrow">НАЧНЁМ С ЗНАКОМСТВА</span><DialogTitle>Привет! Давай разберёмся.</DialogTitle><DialogDescription>Оставь контакт — обсудим занятия и подберём программу под твою задачу.</DialogDescription>
         <form onSubmit={submit} className="booking-form">
           <div className="form-field"><label htmlFor="student-name">Как к тебе обращаться?</label><input id="student-name" name="name" autoComplete="name" required minLength={2} maxLength={80} placeholder="Твоё имя" value={name} onChange={e=>{setName(e.target.value);requestId.current="";}}/></div>
-          <div className="contact-fields"><div className="form-field"><label htmlFor="student-phone">Номер телефона</label><input id="student-phone" name="phone" type="tel" inputMode="tel" autoComplete="tel" maxLength={25} placeholder="+7 999 123-45-67" value={phone} onChange={e=>{setPhone(e.target.value);requestId.current="";}}/></div><div className="form-field"><label htmlFor="student-telegram">Ник в Telegram</label><input id="student-telegram" name="telegram" autoComplete="off" maxLength={33} pattern="@?[A-Za-z][A-Za-z0-9_]{4,31}" title="Ник начинается с @ или латинской буквы и содержит от 5 до 32 символов" placeholder="@username" value={telegram} onChange={e=>{setTelegram(e.target.value);requestId.current="";}}/></div><span className="field-hint contact-hint">Укажи хотя бы один контакт — можно оба.</span></div>
+          <div className="contact-fields"><div className="form-field"><label htmlFor="student-phone">Номер телефона</label><input id="student-phone" name="phone" type="tel" inputMode="tel" autoComplete="tel" maxLength={18} placeholder="+7 (999) 123-45-67" title="Российский номер в формате +7 (999) 123-45-67" value={phone} onChange={e=>{handlePhoneChange(e.currentTarget,setPhone);requestId.current="";}}/></div><div className="form-field"><label htmlFor="student-telegram">Ник в Telegram</label><input id="student-telegram" name="telegram" autoComplete="off" maxLength={33} pattern="@[A-Za-z][A-Za-z0-9_]{4,31}" title="Ник начинается с @ и содержит от 5 до 32 латинских букв, цифр или знаков _" placeholder="@username" value={telegram} onChange={e=>{handleTelegramChange(e.currentTarget,setTelegram);requestId.current="";}}/></div><span className="field-hint contact-hint">Укажи хотя бы один контакт — можно оба.</span></div>
           <fieldset className="subjects-fieldset"><legend>Что будем разбирать?</legend><div className="subject-options">{subjectOptions.map(option=><label className={`subject-option ${subjects.includes(option) ? "selected" : ""}`} key={option}><Checkbox checked={subjects.includes(option)} onCheckedChange={checked=>{setSubjects(current=>checked===true ? current.includes(option) ? current : [...current,option] : current.filter(subject=>subject!==option));requestId.current="";}} aria-label={option}/><span>{option}</span></label>)}</div><span className="field-hint">Можно выбрать несколько направлений.</span></fieldset>
           <div className="form-field details-field"><label htmlFor="student-details">Расскажи подробнее <span>(необязательно)</span></label><textarea id="student-details" name="details" maxLength={1200} placeholder="Например: в каком ты классе, к какому экзамену готовишься и что сейчас вызывает трудности" value={details} onChange={e=>{setDetails(e.target.value);requestId.current="";}}/></div>
           <div className="honeypot" aria-hidden="true"><label>Сайт<input name="website" tabIndex={-1} autoComplete="off"/></label></div>
@@ -85,5 +170,10 @@ export function BookingProvider({ children }: { children: ReactNode }) {
         </form>
       </>}
     </DialogContent></Dialog>
+    {fortuneNotice && <aside className="fortune-reset-notice" role="status" aria-live="polite" aria-atomic="true">
+      <div className="fortune-reset-copy"><strong>Больше попыток</strong><span>Теперь у тебя есть дополнительная попытка в колесе фортуны, вперёд!</span></div>
+      <button className="fortune-reset-close" type="button" onClick={() => setFortuneNotice(false)} aria-label="Закрыть уведомление"><X size={18} aria-hidden="true" /></button>
+      <span className="fortune-reset-progress" aria-hidden="true" />
+    </aside>}
   </BookingContext.Provider>;
 }
