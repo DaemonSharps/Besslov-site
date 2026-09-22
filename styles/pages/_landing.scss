@@ -136,7 +136,7 @@ h1 {
 }
 .hero-star {
   position: absolute;
-  color: var(--blue);
+  color: var(--plum);
   width: 55px;
   right: 0;
   top: 42px;
@@ -147,7 +147,7 @@ h1 {
   right: 54px;
   top: 2px;
   transform: rotate(8deg);
-  color: var(--blue);
+  color: var(--plum);
   font-size: 27px;
 }
 .note {
@@ -348,7 +348,7 @@ mark {
 }
 .head-note {
   font-size: 26px;
-  color: var(--blue);
+  color: var(--plum);
   transform: rotate(6deg);
   padding-right: 35px;
   padding-bottom: 10px;
@@ -400,7 +400,7 @@ mark {
   border-top: 3px solid var(--lime);
 }
 .value-2 {
-  border-top: 3px solid #7897ef;
+  border-top: 3px solid var(--plum);
 }
 .value-3 {
   border-top: 3px solid #fbac94;
@@ -559,7 +559,7 @@ mark {
 }
 .white-number {
   background: white;
-  color: var(--blue);
+  color: var(--plum);
 }
 .shelf-item h3 {
   font-size: 14px;
@@ -571,20 +571,20 @@ mark {
   margin-top: 5px;
 }
 .practice-step {
-  background: var(--blue);
-  border-color: var(--blue);
-  color: white;
+  background: var(--plum-surface);
+  border-color: var(--plum);
+  color: var(--ink);
 }
 .practice-step h3 {
   font-size: 18px;
 }
 .practice-step p {
-  color: #f2f5ff;
+  color: var(--color-text-muted);
   font-size: 14px;
 }
 .practice-step > svg {
   margin-left: auto;
-  color: #c7d3ff;
+  color: var(--plum);
   flex-shrink: 0;
 }
 .shelf-caption {
@@ -626,9 +626,9 @@ mark {
   border-color: #ccd571;
 }
 .blue-format {
-  background: var(--blue);
-  border-color: var(--blue);
-  color: white;
+  background: var(--plum-surface);
+  border-color: var(--plum);
+  color: var(--ink);
 }
 .peach-format {
   background: #f8e7dc;
@@ -701,11 +701,15 @@ mark {
   background: #e55336;
   color: white;
 }
+.blue-format .format-button {
+  background: var(--plum);
+  color: white;
+}
 .blue-format p {
-  color: #f2f4ff;
+  color: var(--color-text-muted);
 }
 .blue-format .format-tags span {
-  border-color: #fff5;
+  border-color: color-mix(in srgb, var(--plum) 35%, transparent);
 }
 .format-art {
   position: absolute;
@@ -728,7 +732,7 @@ mark {
   transform: rotate(-8deg);
 }
 .blue-format .format-art {
-  color: #d8e2ff;
+  color: var(--plum);
   transform: rotate(9deg);
 }
 .peach-format .format-art {
@@ -780,7 +784,7 @@ mark {
   position: absolute;
   top: 38px;
   left: 57px;
-  color: var(--blue);
+  color: var(--plum);
   width: 75px;
   transform: rotate(-14deg);
 }
@@ -887,7 +891,7 @@ fieldset legend {
   font-size: 16px;
 }
 .form-field input:focus {
-  outline: 2px solid var(--blue);
+  outline: 2px solid var(--plum);
   outline-offset: 1px;
 }
 .field-hint {

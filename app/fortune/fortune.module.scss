@@ -105,11 +105,11 @@
   background: conic-gradient(
     from 0deg,
     var(--pink) 0deg 60deg,
-    var(--blue) 60deg 120deg,
+    var(--plum-surface) 60deg 120deg,
     var(--lime) 120deg 180deg,
     #f7ead2 180deg 240deg,
     var(--pink) 240deg 300deg,
-    var(--blue) 300deg 360deg
+    var(--plum-surface) 300deg 360deg
   );
   box-shadow: inset 0 0 0 2px #24231f2a;
   transform: rotate(var(--wheel-rotation, 0deg));

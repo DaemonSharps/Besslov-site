@@ -75,7 +75,7 @@
 
 .header p {
   margin-top: 12px;
-  color: var(--blue);
+  color: var(--plum);
   font-family: var(--script);
   font-size: 27px;
   transform: rotate(-3deg);
@@ -266,12 +266,12 @@
   border-color: var(--lime);
 }
 .step.result {
-  background: var(--blue);
-  border-color: var(--blue);
-  color: white;
+  background: var(--plum-surface);
+  border-color: var(--plum);
+  color: var(--ink);
 }
 .step.result p {
-  color: white;
+  color: var(--color-text-muted);
 }
 
 .phase {
@@ -287,10 +287,10 @@
   color: var(--ink);
 }
 .preparation .phase {
-  color: var(--blue);
+  color: var(--plum);
 }
 .result .phase {
-  color: var(--lime);
+  color: var(--plum);
 }
 .step h3 {
   font-size: clamp(1.15rem, 1.7vw, 1.45rem);

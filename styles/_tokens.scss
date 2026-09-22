@@ -3,7 +3,10 @@
   --color-ink: #24231f;
   --color-pink: #ed1977;
   --color-lime: #d8ee32;
-  --color-blue: #164bf0;
+  // Plum replaces the former high-contrast blue as the calm global accent.
+  --color-plum: #62455e;
+  --color-plum-surface: #f5eef4;
+  --color-blue: var(--color-plum);
   --color-text-muted: #625c50;
   --color-text-subtle: #71695e;
   --color-border: #d1ccc3;
@@ -15,7 +18,7 @@
   --color-surface-peach: #f8e7dc;
   --color-surface-method: #f1eee5;
   --color-danger: #b91c1c;
-  --color-focus: #174df2;
+  --color-focus: var(--color-plum);
 
   // Compatibility aliases used by the existing visual language and Tailwind.
   --background: var(--color-paper);
@@ -35,12 +38,14 @@
   --destructive: var(--color-danger);
   --border: var(--color-border);
   --input: #bdb6aa;
-  --ring: #174df2;
+  --ring: var(--color-plum);
 
   // Required public aliases.
   --pink: var(--color-pink);
   --lime: var(--color-lime);
   --blue: var(--color-blue);
+  --plum: var(--color-plum);
+  --plum-surface: var(--color-plum-surface);
   --ink: var(--color-ink);
   --paper: var(--color-paper);
 
