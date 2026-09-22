@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import { Check, Download, ExternalLink, RotateCw } from "lucide-react";
 import { REQUIRED_COOKIE } from "@/components/cookie-notice";
 import styles from "./fortune.module.scss";
@@ -61,13 +61,20 @@ export function FortuneWheel() {
   const [result, setResult] = useState<Prize | null>(null);
   const [spinning, setSpinning] = useState(false);
   const [rotation, setRotation] = useState(0);
-  const spinTimeout = useRef<number | null>(null);
+  const rotationRef = useRef(0);
+  const animationFrame = useRef<number | null>(null);
+  const wheelFrame = useRef<HTMLDivElement>(null);
+  const drag = useRef<{ pointerId: number; angle: number; lastTime: number; velocity: number; moved: boolean } | null>(null);
 
   useEffect(() => {
     const syncStoredState = () => {
       const storedPrize = getCookie(FORTUNE_COOKIE);
       if (!getCookie(REQUIRED_COOKIE)) setCookie(REQUIRED_COOKIE, "1", REQUIRED_COOKIE_MAX_AGE);
       setCookieReady(Boolean(getCookie(REQUIRED_COOKIE)));
+
+      const initialRotation = Math.random() * 360;
+      rotationRef.current = initialRotation;
+      setRotation(initialRotation);
 
       const storedAttempts = normalizeAttempts(window.localStorage.getItem(FORTUNE_ATTEMPTS_KEY));
       const normalizedAttempts = storedAttempts ?? (storedPrize && storedPrize !== "ready" ? 0 : 1);
@@ -84,13 +91,13 @@ export function FortuneWheel() {
       const normalizedAttempts = normalizeAttempts(detail?.attempts);
       if (normalizedAttempts === null) return;
 
-      if (spinTimeout.current !== null) {
-        window.clearTimeout(spinTimeout.current);
-        spinTimeout.current = null;
-      }
+      if (animationFrame.current !== null) window.cancelAnimationFrame(animationFrame.current);
+      animationFrame.current = null;
+      drag.current = null;
       setAttempts(normalizedAttempts);
       setResult(null);
       setSpinning(false);
+      rotationRef.current = 0;
       setRotation(0);
     };
 
@@ -99,37 +106,117 @@ export function FortuneWheel() {
     return () => {
       window.clearTimeout(syncId);
       window.removeEventListener(FORTUNE_RESET_EVENT, handleFortuneReset);
-      if (spinTimeout.current !== null) window.clearTimeout(spinTimeout.current);
+      if (animationFrame.current !== null) window.cancelAnimationFrame(animationFrame.current);
     };
   }, []);
 
-  function spin() {
-    if (!cookieReady || attempts <= 0 || spinning) return;
+  function prizeAt(rotationValue: number) {
+    // CSS conic-gradient starts at the top and turns clockwise; the fixed
+    // pointer is at 180deg, at the bottom of the wheel.
+    const underPointer = ((180 - rotationValue) % 360 + 360) % 360;
+    return prizes[Math.floor(underPointer / 60)];
+  }
 
-    const index = Math.floor(Math.random() * prizes.length);
-    const prize = prizes[index];
-    const targetRotation = 360 * 6 - (index * 60 + 30);
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function finishSpin() {
+    const prize = prizeAt(rotationRef.current);
     const nextAttempts = attempts - 1;
-
     window.localStorage.setItem(FORTUNE_ATTEMPTS_KEY, String(nextAttempts));
     setCookie(FORTUNE_COOKIE, prize.id, SPIN_MAX_AGE);
     setAttempts(nextAttempts);
-    setResult(null);
-    setRotation(targetRotation);
-    setSpinning(true);
+    setSpinning(false);
+    setResult(prize);
+  }
 
-    if (reducedMotion) {
-      setSpinning(false);
-      setResult(prize);
+  function animateInertia(initialVelocity: number, slowDownDuration = 760) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      rotationRef.current += initialVelocity * 120;
+      setRotation(rotationRef.current);
+      finishSpin();
       return;
     }
 
-    spinTimeout.current = window.setTimeout(() => {
-      spinTimeout.current = null;
-      setSpinning(false);
-      setResult(prize);
-    }, 2500);
+    let velocity = initialVelocity;
+    let previousTime = performance.now();
+    const frame = (time: number) => {
+      const elapsed = Math.min(time - previousTime, 64);
+      previousTime = time;
+      rotationRef.current += velocity * elapsed;
+      setRotation(rotationRef.current);
+      velocity *= Math.exp(-elapsed / slowDownDuration);
+      if (Math.abs(velocity) < 0.012) {
+        animationFrame.current = null;
+        finishSpin();
+        return;
+      }
+      animationFrame.current = window.requestAnimationFrame(frame);
+    };
+    animationFrame.current = window.requestAnimationFrame(frame);
+  }
+
+  function releaseWheel(velocity: number) {
+    drag.current = null;
+    if (Math.abs(velocity) < 0.04) {
+      finishSpin();
+      return;
+    }
+    animateInertia(velocity);
+  }
+
+  function spin() {
+    if (!cookieReady || attempts <= 0 || spinning) return;
+    setResult(null);
+    setSpinning(true);
+    const force = 2 + Math.random() * 4;
+    const slowDownDuration = 1000 + Math.random() * 3000;
+    // The automatic flick varies each time; the prize is still resolved only
+    // from the final angle beneath the fixed pointer.
+    animateInertia(force, slowDownDuration);
+  }
+
+  function pointerAngle(event: ReactPointerEvent<HTMLDivElement>) {
+    const bounds = wheelFrame.current?.getBoundingClientRect();
+    if (!bounds) return 0;
+    return Math.atan2(event.clientX - (bounds.left + bounds.width / 2), (bounds.top + bounds.height / 2) - event.clientY) * 180 / Math.PI;
+  }
+
+  function handlePointerDown(event: ReactPointerEvent<HTMLDivElement>) {
+    if (!cookieReady || attempts <= 0 || spinning || (event.target as Element).closest("button")) return;
+    drag.current = { pointerId: event.pointerId, angle: pointerAngle(event), lastTime: performance.now(), velocity: 0, moved: false };
+    wheelFrame.current?.setPointerCapture(event.pointerId);
+  }
+
+  function handlePointerMove(event: ReactPointerEvent<HTMLDivElement>) {
+    const current = drag.current;
+    if (!current || current.pointerId !== event.pointerId) return;
+    const angle = pointerAngle(event);
+    let delta = angle - current.angle;
+    if (delta > 180) delta -= 360;
+    if (delta < -180) delta += 360;
+    const now = performance.now();
+    const elapsed = Math.max(now - current.lastTime, 1);
+    if (Math.abs(delta) > 0.1) current.moved = true;
+    rotationRef.current += delta;
+    setRotation(rotationRef.current);
+    current.velocity = delta / elapsed;
+    current.angle = angle;
+    current.lastTime = now;
+  }
+
+  function handlePointerUp(event: ReactPointerEvent<HTMLDivElement>) {
+    const current = drag.current;
+    if (!current || current.pointerId !== event.pointerId) return;
+    wheelFrame.current?.releasePointerCapture(event.pointerId);
+    if (!current.moved) {
+      drag.current = null;
+      return;
+    }
+    setResult(null);
+    setSpinning(true);
+    releaseWheel(current.velocity);
+  }
+
+  function handlePointerCancel(event: ReactPointerEvent<HTMLDivElement>) {
+    if (drag.current?.pointerId === event.pointerId) drag.current = null;
   }
 
   const wheelStyle: WheelStyle = { "--wheel-rotation": `${rotation}deg` };
@@ -140,7 +227,7 @@ export function FortuneWheel() {
     <div className={styles.wheelColumn}>
       <div className={styles.wheelStage}>
         <span className={styles.pointer} aria-hidden="true" />
-        <div className={styles.wheelFrame}>
+        <div className={styles.wheelFrame} ref={wheelFrame} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={handlePointerUp} onPointerCancel={handlePointerCancel}>
           <div className={styles.wheel} style={wheelStyle} role="img" aria-label="Колесо с шестью полезными бонусами">
             {prizes.map((prize, index) => (
               <span
@@ -160,7 +247,7 @@ export function FortuneWheel() {
       </div>
 
       <p className={styles.wheelHint} aria-live="polite">
-        {spinning ? "Колесо выбирает твой бонус…" : result ? attempts > 0 ? `Приз ниже. Осталось попыток: ${attempts}.` : "Попытка использована. Загляни за призом ниже." : cookieReady ? `Осталось попыток: ${attempts}. Нажми на центр колеса.` : "Подожди, пока включатся обязательные cookie."}
+        {spinning ? "Колесо замедляется…" : result ? attempts > 0 ? `Приз ниже. Осталось попыток: ${attempts}.` : "Попытка использована. Загляни за призом ниже." : cookieReady ? `Осталось попыток: ${attempts}. Потяни колесо и отпусти — или нажми на центр.` : "Подожди, пока включатся обязательные cookie."}
       </p>
 
       {result && (
