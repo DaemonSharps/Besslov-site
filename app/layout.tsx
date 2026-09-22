@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { CookieNotice } from "@/components/cookie-notice";
 import { BookingProvider } from "@/components/booking-shell";
+import { CursorParticleTrail } from "@/components/cursor-particle-trail";
 import "./tailwind.css";
 import "./globals.scss";
 
@@ -52,6 +53,7 @@ export default function RootLayout({
       <body className="antialiased">
         <BookingProvider>{children}</BookingProvider>
         <CookieNotice />
+        <CursorParticleTrail />
       </body>
     </html>
   );

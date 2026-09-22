@@ -1,0 +1,44 @@
+.trail {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  left: var(--particle-x);
+  top: var(--particle-y);
+  width: var(--particle-size);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--particle-color);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(-50%, -50%, 0) scale(1);
+  animation: particle-fade var(--particle-duration) var(--ease-brand) forwards;
+}
+
+@keyframes particle-fade {
+  0% {
+    opacity: 0.82;
+    transform: translate3d(-50%, -50%, 0) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(
+        calc(-50% + var(--particle-drift-x)),
+        calc(-50% + var(--particle-drift-y)),
+        0
+      )
+      scale(0.15);
+  }
+}
+
+@media (prefers-reduced-motion: reduce), (pointer: coarse) {
+  .trail {
+    display: none;
+  }
+}
