@@ -8,7 +8,7 @@ import { ScrollReveal } from "@/components/scroll-reveal";
 
 export const metadata: Metadata = {
   title: "Истории учеников — бесслов",
-  description: "Личные истории занятий по русскому языку: от точки старта до результата.",
+  description: "Истории занятий и отзывы учеников по русскому языку.",
 };
 
 export default async function ReviewsPage({

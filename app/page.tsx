@@ -7,10 +7,10 @@ import { ScrollReveal } from "@/components/scroll-reveal";
 import { useBooking } from "@/components/booking-shell";
 
 const formats = [
-  { title: "Русский язык", label: "ПОНЯТЬ И ПОЛЮБИТЬ", text: "От «как слышится» к «я знаю почему». Разбираемся в правилах и применяем их на практике.", className: "pink-format", icon: "Ая", tags: ["8–11 классы", "Школьная программа"] },
+  { title: "Русский язык", label: "РАЗОБРАТЬСЯ В ПРАВИЛАХ", text: "От «как слышится» к «я знаю почему». Разбираемся в правилах и применяем их на практике.", className: "pink-format", icon: "Ая", tags: ["8–11 классы", "Школьная программа"] },
   { title: "Литература", label: "ЧИТАТЬ МЕЖДУ СТРОК", text: "Герои, смыслы и твоя точка зрения. Учимся понимать текст и говорить о нём своими словами.", className: "lime-format", icon: "book", tags: ["Анализ произведений", "Работа с текстом"] },
   { title: "ЕГЭ / ОГЭ", label: "СПОКОЙНО, ЭТО ПО ПЛАНУ", text: "Собираем знания в систему: от отдельного задания до целого варианта. Двигаемся в твоём темпе.", className: "blue-format", icon: "exam", tags: ["Подготовка к экзаменам", "9–11 классы"] },
-  { title: "Сочинения и пробники", label: "ОТ ЧИСТОГО ЛИСТА К РЕЗУЛЬТАТУ", text: "Учимся формулировать мысли. Проверяем себя на пробниках и вместе разбираем ошибки.", className: "peach-format", icon: "pencil", tags: ["Обратная связь", "Практика письма"] },
+  { title: "Сочинения и пробники", label: "ОТ ЧИСТОГО ЛИСТА К ПОНЯТНОМУ ТЕКСТУ", text: "Учимся формулировать мысли, писать сочинения и проверять себя на пробниках. Ошибки разбираем вместе.", className: "peach-format", icon: "pencil", tags: ["Обратная связь", "Практика письма"] },
 ];
 function Sticker({kind, className = ""}: {kind: string; className?: string}) { return <span aria-hidden="true" className={`sticker sticker-${kind} ${className}`} />; }
 function Doodle({className = ""}: {className?: string}) {return <svg aria-hidden="true" className={`doodle ${className}`} viewBox="0 0 70 70" fill="none"><path d="m33 4 5 23L63 15 47 37l17 17-26-6-10 19-3-26L4 33l24-5Z" stroke="currentColor" strokeWidth="3" strokeLinejoin="round" /></svg>;}
@@ -24,8 +24,8 @@ export default function Home() {
       <ScrollReveal><section className="hero notebook"><div className="hero-inner container">
         <div className="hero-copy"><span className="eyebrow"><span className="mini-line"/> РУССКИЙ ЯЗЫК И ЛИТЕРАТУРА · 8–11 КЛАССЫ</span>
           <h1>Филолог,<br/>который объясняет<br/><span className="human">по-человечески<svg viewBox="0 0 580 24" preserveAspectRatio="none" aria-hidden="true"><path d="M4 13Q280 29 575 6M24 21Q330 29 554 16"/></svg></span></h1>
-          <p className="hero-description">Помогу подружиться с русским и литературой.<br className="desktop-br"/> Разложим по полочкам то, что раньше<br className="desktop-br"/> казалось запутанным.</p>
-          <div className="hero-actions"><button className="button button-pink" onClick={()=>startBooking()}>Хочу разобраться <ArrowUpRight size={20}/></button><a className="text-link" href="#method">Как проходят занятия <ArrowDown size={17}/></a></div>
+          <p className="hero-description">Индивидуальные онлайн-занятия по 60 минут для 8–11 классов.<br className="desktop-br"/> Разбираем русский язык и литературу, готовимся к ЕГЭ и ОГЭ,<br className="desktop-br"/> пишем сочинения и решаем пробники.</p>
+          <div className="hero-actions"><button className="button button-pink" onClick={()=>startBooking()}>Оставить заявку <ArrowUpRight size={20}/></button><a className="text-link" href="#method">Как проходят занятия <ArrowDown size={17}/></a></div>
           <div className="lesson-meta"><span>Индивидуально</span><span>Онлайн</span><span>60 минут</span></div>
         </div>
         <div className="hero-visual"><div className="portrait-frame" role="img" aria-label="Портрет преподавателя из предоставленного референса"/><Doodle className="hero-star"/><span className="hero-hi hand">привет, это я!</span>
@@ -43,11 +43,11 @@ export default function Home() {
       </section></ScrollReveal>
       <ScrollReveal><section className="method-section section" id="method"><div className="container method-layout">
         <div className="chaos-poster"><span className="poster-label">У ВСЕГО ЕСТЬ СВОЁ МЕСТО</span><div className="chaos-letters" aria-label="Хаос">{["Х","А","О","С"].map(l=><span key={l}>{l}</span>)}</div><div className="chaos-arrow"><svg viewBox="0 0 100 120" aria-hidden="true"><path d="M34 5C8 57 102 48 61 72S12 47 43 56s30 34 9 49m-11-17 11 20 15-13"/></svg></div><div className="system-word">СИСТЕМА</div><p>Понятный маршрут.<br/>Ваш темп. Всё по делу.</p><Doodle className="poster-star"/></div>
-        <div className="shelves-wrap"><span className="eyebrow">ОТ «НЕ ПОНИМАЮ» К «Я МОГУ»</span><h2>Разложим<br/><span className="underline-lime">по полочкам</span></h2><p className="section-description">У каждого шага своя задача. И на каждом я рядом.</p>
+        <div className="shelves-wrap"><span className="eyebrow">ОТ ВОПРОСОВ К ПОНЯТНОМУ ПЛАНУ</span><h2>Разложим<br/><span className="underline-lime">по полочкам</span></h2><p className="section-description">У каждого шага своя задача. И на каждом я рядом.</p>
           <div className="shelves"><div className="shelf-row"><article className="shelf-item"><span className="step-number pink-number">01</span><div><h3>Обсуждаем задачу</h3><p>Цель занятий и текущие трудности</p></div></article><article className="shelf-item"><span className="step-number lime-number">02</span><div><h3>Определяем план</h3><p>С чего начнём и что будем отрабатывать</p></div></article></div>
             <div className="shelf-row"><article className="shelf-item practice-step"><span className="step-number white-number">03</span><div><h3>Разбираем тему</h3><p>Понятные объяснения и примеры</p></div><PencilLine size={34}/></article></div>
             <div className="shelf-row"><article className="shelf-item"><span className="step-number lime-number">04</span><div><h3>Практикуемся</h3><p>Закрепляем знания в заданиях</p></div></article><article className="shelf-item"><span className="step-number pink-number">05</span><div><h3>Разбираем ошибки</h3><p>Понимаем, чему уделить внимание</p></div></article></div>
-          </div><span className="hand shelf-caption">и вот хаос становится системой :)</span>
+          </div><span className="hand shelf-caption">и шаг за шагом становится понятнее :)</span>
         </div>
       </div></section></ScrollReveal>
        <ScrollReveal><section className="formats-section section container" id="formats">
@@ -61,7 +61,7 @@ export default function Home() {
            <div className="fortune-promo-copy">
              <h2 id="fortune-promo-title">Крути рулетку<br /><span>полезных подарков!</span></h2>
              <p>Шпаргалки, статьи и другие материалы — бесплатно и без регистрации.</p>
-             <span className="fortune-promo-action">Крутить рулетку <ArrowUpRight size={19} aria-hidden="true" /></span>
+             <span className="fortune-promo-action">Проверить удачу!<ArrowUpRight size={19} aria-hidden="true" /></span>
            </div>
            <div className="fortune-promo-wheel" aria-hidden="true">
              <span className="fortune-promo-pointer" />
@@ -72,10 +72,10 @@ export default function Home() {
        <ScrollReveal><section className="reviews-teaser section" aria-labelledby="reviews-teaser-title">
         <div className="reviews-teaser-inner">
           <div className="reviews-teaser-heading"><span className="eyebrow">ИСТОРИИ УЧЕНИКОВ</span><h2 id="reviews-teaser-title">За каждым отзывом —<br /><span>свой путь.</span></h2><span className="hand reviews-teaser-aside">от первого вопроса<br/>до «теперь понятно»</span></div>
-          <div className="reviews-teaser-copy"><p>С чего начались занятия, как мы работали и что изменилось. Истории и впечатления учеников — на отдельной странице.</p><a className="button button-dark" href="/reviews">К отзывам <ArrowUpRight size={20} aria-hidden="true" /></a></div><div className="review-preview" aria-hidden="true"><svg className="review-preview-lines" viewBox="0 0 620 150" preserveAspectRatio="none"><path d="M75 82C160 22 205 25 285 72s105 43 165-8 92-42 100-15"/><path d="M285 72c20-33 34-44 58-51"/></svg><div className="review-mini-card review-mini-card-one"><span/><i/><i/><b/></div><div className="review-mini-card review-mini-card-two"><span/><i/><i/><b/></div><div className="review-mini-card review-mini-card-three"><span/><i/><i/><b/></div></div>
+          <div className="reviews-teaser-copy"><p>Здесь собраны истории занятий и впечатления учеников. Посмотри материалы на отдельной странице.</p><a className="button button-dark" href="/reviews">К отзывам <ArrowUpRight size={20} aria-hidden="true" /></a></div><div className="review-preview" aria-hidden="true"><svg className="review-preview-lines" viewBox="0 0 620 150" preserveAspectRatio="none"><path d="M75 82C160 22 205 25 285 72s105 43 165-8 92-42 100-15"/><path d="M285 72c20-33 34-44 58-51"/></svg><div className="review-mini-card review-mini-card-one"><span/><i/><i/><b/></div><div className="review-mini-card review-mini-card-two"><span/><i/><i/><b/></div><div className="review-mini-card review-mini-card-three"><span/><i/><i/><b/></div></div>
         </div>
       </section></ScrollReveal>
-      <ScrollReveal><section className="cta-section container" id="contact"><div className="final-banner"><Doodle className="cta-star"/><span className="eyebrow">ТЕПЕРЬ ТВОЯ ОЧЕРЕДЬ</span><h2>В голове хаос?<br/><span>Давай наведём порядок.</span></h2><p>Начнём с знакомства. Расскажешь, что пока не получается,<br className="desktop-br"/> а я помогу понять, куда двигаться дальше.</p><button className="button button-dark" onClick={()=>startBooking()}>Хочу на занятия <ArrowUpRight size={22}/></button><span className="hand cta-note">первый шаг — вот здесь</span><Sticker kind="flower" className="cta-flower"/></div></section></ScrollReveal>
+      <ScrollReveal><section className="cta-section container" id="contact"><div className="final-banner"><Doodle className="cta-star"/><span className="eyebrow">ТЕПЕРЬ ТВОЯ ОЧЕРЕДЬ</span><h2>Есть вопросы по предмету?<br/><span>Разберёмся вместе.</span></h2><p>Начнём с знакомства. Расскажешь, что пока не получается,<br className="desktop-br"/> а я помогу понять, куда двигаться дальше.</p><button className="button button-dark" onClick={()=>startBooking()}>Оставить заявку <ArrowUpRight size={22}/></button><span className="hand cta-note">первый шаг — вот здесь</span><Sticker kind="flower" className="cta-flower"/></div></section></ScrollReveal>
     </main>
     <SiteFooter />
   </>;
