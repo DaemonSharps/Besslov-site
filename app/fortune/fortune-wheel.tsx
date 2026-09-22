@@ -32,6 +32,7 @@ const prizes: Prize[] = [
 type WheelStyle = CSSProperties & {
   "--wheel-rotation"?: string;
   "--label-angle"?: string;
+  "--label-text-rotation"?: string;
 };
 
 function getCookie(name: string) {
@@ -170,12 +171,21 @@ export function FortuneWheel() {
       <div className={styles.wheelStage}>
         <span className={styles.pointer} aria-hidden="true" />
         <div className={styles.wheelFrame}>
-          <div className={styles.wheel} style={wheelStyle} role="img" aria-label="Колесо с шестью полезными бонусами">
+          <div
+            className={styles.wheel}
+            style={wheelStyle}
+            role="img"
+            aria-label={`Колесо с призами: ${prizes.map(prize => prize.title).join(", ")}`}
+          >
             {prizes.map((prize, index) => (
               <span
                 className={styles.wheelLabel}
                 key={prize.id}
-                style={{ "--label-angle": `${index * 60 + 30}deg` } as WheelStyle}
+                style={{
+                  "--label-angle": `${index * 60 + 30}deg`,
+                  // Keep the radial text upright on both halves of the wheel.
+                  "--label-text-rotation": index < 3 ? "-90deg" : "90deg",
+                } as WheelStyle}
                 aria-hidden="true"
               >
                 {prize.title}

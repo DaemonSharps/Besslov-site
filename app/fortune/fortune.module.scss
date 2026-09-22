@@ -108,6 +108,7 @@
   );
   box-shadow: inset 0 0 0 2px #24231f2a;
   transform: rotate(var(--wheel-rotation, 0deg));
+  container-type: inline-size;
 }
 .wheel::after {
   content: "";
@@ -127,8 +128,8 @@
   line-height: 1.05;
   text-align: center;
   text-transform: uppercase;
-  transform: translate(-50%, -50%) rotate(var(--label-angle)) translateY(-112px)
-    rotate(calc(var(--label-angle) * -1));
+  transform: translate(-50%, -50%) rotate(var(--label-angle)) translateY(-30cqw)
+    rotate(var(--label-text-rotation));
   transform-origin: center;
 }
 .wheelLabel:nth-of-type(1),
@@ -323,10 +324,6 @@
   .backLink {
     margin-bottom: 45px;
   }
-  .wheelLabel {
-    transform: translate(-50%, -50%) rotate(var(--label-angle))
-      translateY(-91px) rotate(calc(var(--label-angle) * -1));
-  }
   .wheelButton {
     width: 112px;
     font-size: 17px;
@@ -352,8 +349,6 @@
     width: min(100%, 440px);
   }
   .wheelLabel {
-    transform: translate(-50%, -50%) rotate(var(--label-angle))
-      translateY(-83px) rotate(calc(var(--label-angle) * -1));
     font-size: 11px;
   }
   .wheelButton {
@@ -389,8 +384,6 @@
     grid-template-columns: 1fr;
   }
   .wheelLabel {
-    transform: translate(-50%, -50%) rotate(var(--label-angle))
-      translateY(-72px) rotate(calc(var(--label-angle) * -1));
     font-size: 10px;
   }
   .wheelButton {
