@@ -1,0 +1,191 @@
+﻿/* Fortune wheel promotion */
+.fortune-promo {
+  padding-top: 34px;
+}
+.fortune-promo-inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.12fr 0.88fr;
+  min-height: 292px;
+  align-items: center;
+  gap: 28px;
+  overflow: hidden;
+  padding: 36px 52px;
+  border: 1px solid #e59fb9;
+  border-radius: 15px;
+  background: #f9e3ec;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+.fortune-promo-inner:hover {
+  transform: translateY(-4px);
+  box-shadow: 7px 8px 0 #24231f1c;
+}
+.fortune-promo-tape {
+  position: absolute;
+  top: 17px;
+  left: 29px;
+  width: 160px;
+  height: 27px;
+  background:
+    repeating-linear-gradient(135deg, #fff6 0 3px, transparent 3px 10px),
+    var(--pink);
+  transform: rotate(-7deg);
+  opacity: 0.95;
+}
+.fortune-promo-copy {
+  position: relative;
+  z-index: 2;
+  max-width: 500px;
+}
+.fortune-promo-copy .eyebrow {
+  color: var(--pink);
+}
+.fortune-promo-copy h2 {
+  margin-top: 9px;
+  font-size: clamp(2rem, 4vw, 3.45rem);
+  line-height: 1.07;
+}
+.fortune-promo-copy h2 span {
+  color: var(--pink);
+  font-family: var(--script);
+}
+.fortune-promo-copy p {
+  max-width: 430px;
+  margin-top: 14px;
+  font-size: 15px;
+  line-height: 1.55;
+}
+.fortune-promo-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 23px;
+  margin-top: 20px;
+  padding: 11px 17px;
+  border-radius: 999px;
+  background: var(--paper);
+  font-size: 14px;
+  font-weight: 600;
+  transition: gap 0.2s;
+}
+.fortune-promo-action svg {
+  color: var(--pink);
+}
+.fortune-promo-inner:hover .fortune-promo-action {
+  gap: 30px;
+}
+.fortune-promo-wheel {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 275px);
+  aspect-ratio: 1;
+  justify-self: center;
+  display: grid;
+  place-items: center;
+  border: 8px solid var(--paper);
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    var(--pink) 0deg 60deg,
+    var(--lime) 60deg 120deg,
+    var(--blue) 120deg 180deg,
+    #f7ead2 180deg 240deg,
+    var(--pink) 240deg 300deg,
+    var(--lime) 300deg 360deg
+  );
+  box-shadow:
+    7px 9px 0 #24231f2e,
+    inset 0 0 0 2px #24231f2a;
+  transform: rotate(7deg);
+  transition: transform 0.25s;
+}
+.fortune-promo-inner:hover .fortune-promo-wheel {
+  transform: rotate(13deg);
+}
+.fortune-promo-wheel:after {
+  content: "";
+  position: absolute;
+  inset: 9%;
+  border: 1px dashed #fff9;
+  border-radius: 50%;
+}
+.fortune-promo-wheel > span:not(.fortune-promo-pointer) {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 94px;
+  aspect-ratio: 1;
+  border: 4px solid var(--paper);
+  border-radius: 50%;
+  background: var(--ink);
+  color: white;
+  font-family: var(--script);
+  font-size: 27px;
+  font-weight: 700;
+  transform: rotate(-7deg);
+}
+.fortune-promo-pointer {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  z-index: 3;
+  width: 0;
+  height: 0;
+  border-right: 17px solid transparent;
+  border-bottom: 40px solid var(--ink);
+  border-left: 17px solid transparent;
+  filter: drop-shadow(0 3px 0 #24231f34);
+  transform: translateX(-50%);
+}
+@media (max-width: 900px) {
+  .fortune-promo-inner {
+    padding-inline: 35px;
+  }
+  .fortune-promo-copy h2 {
+    font-size: clamp(1.9rem, 4.8vw, 3rem);
+  }
+  .fortune-promo-wheel {
+    width: min(100%, 230px);
+  }
+}
+@media (max-width: 600px) {
+  .fortune-promo {
+    padding-top: 22px;
+  }
+  .fortune-promo-inner {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 31px 24px 35px;
+  }
+  .fortune-promo-tape {
+    left: 18px;
+    width: 130px;
+  }
+  .fortune-promo-copy h2 {
+    font-size: clamp(2.1rem, 10vw, 3.1rem);
+  }
+  .fortune-promo-copy p {
+    font-size: 14px;
+  }
+  .fortune-promo-action {
+    margin-top: 17px;
+  }
+  .fortune-promo-wheel {
+    width: min(68vw, 245px);
+    justify-self: end;
+    margin-right: 4px;
+  }
+  .fortune-promo-wheel > span:not(.fortune-promo-pointer) {
+    width: 82px;
+    font-size: 24px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fortune-promo-inner,
+  .fortune-promo-action,
+  .fortune-promo-wheel {
+    transition: none;
+  }
+}

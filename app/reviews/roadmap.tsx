@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { StudentStory } from "./stories";
-import styles from "./roadmap.module.css";
+import styles from "./roadmap.module.scss";
 
 const phaseLabels = {
   start: "точка старта",

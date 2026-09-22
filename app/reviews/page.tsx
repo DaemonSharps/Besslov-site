@@ -3,7 +3,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { studentStories } from "./stories";
 import { Roadmaps } from "./roadmap";
-import styles from "./roadmap.module.css";
+import styles from "./roadmap.module.scss";
 import { ScrollReveal } from "@/components/scroll-reveal";
 
 export const metadata: Metadata = {

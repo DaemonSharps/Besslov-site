@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import styles from "./scroll-reveal.module.css";
+import styles from "./scroll-reveal.module.scss";
 
 /**
  * Keeps the server-rendered content visible until the browser can observe it.

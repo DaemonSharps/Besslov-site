@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Check, Download, ExternalLink, RotateCw } from "lucide-react";
 import { REQUIRED_COOKIE } from "@/components/cookie-notice";
-import styles from "./fortune.module.css";
+import styles from "./fortune.module.scss";
 
 const FORTUNE_COOKIE = "besslov_fortune";
 const FORTUNE_ATTEMPTS_KEY = "besslov_fortune_attempts";

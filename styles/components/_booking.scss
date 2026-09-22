@@ -1,0 +1,80 @@
+﻿.contact-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.contact-hint {
+  grid-column: 1/-1;
+  margin-top: -3px;
+}
+.form-field textarea {
+  width: 100%;
+  min-height: 104px;
+  resize: vertical;
+  border: 1px solid #b5a999;
+  border-radius: 8px;
+  background: #fff;
+  padding: 11px 13px;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.5;
+  box-shadow: 0 3px 0 #24231f12;
+}
+.form-field textarea::placeholder {
+  color: #84796c;
+}
+.form-field textarea:focus {
+  outline: 2px solid var(--blue);
+  outline-offset: 1px;
+}
+.details-field label span {
+  font-weight: 400;
+  color: #71695e;
+}
+.subject-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 12px;
+}
+.subject-option {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  column-gap: 12px;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid #c2b7a8;
+  border-radius: 10px;
+  background: #f3ede3;
+  cursor: pointer;
+  font-size: 14px;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+.subject-option span {
+  display: block;
+  min-width: 0;
+}
+.subject-option.selected {
+  background: #fbe3ed;
+  border-color: var(--pink);
+}
+.subject-option [data-slot="checkbox"] {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+}
+.subjects-fieldset .field-hint {
+  display: block;
+  margin-top: 8px;
+}
+@media (max-width: 600px) {
+  .contact-fields,
+  .subject-options {
+    grid-template-columns: 1fr;
+  }
+  .contact-hint {
+    grid-column: auto;
+  }
+}

@@ -1,0 +1,48 @@
+﻿/* Shared vertical rhythm for landing sections and standalone cards */
+:root {
+  --landing-section-space: 88px;
+  --landing-section-space-tablet: 63px;
+  --landing-section-space-mobile: 53px;
+  --landing-card-space: 72px;
+  --landing-card-space-tablet: 54px;
+  --landing-card-space-mobile: 44px;
+}
+.section,
+.method-section {
+  padding-block: var(--landing-section-space);
+}
+.fortune-promo {
+  padding-block: 0 var(--landing-card-space);
+}
+.reviews-teaser {
+  padding-block: 0 var(--landing-card-space);
+}
+.cta-section {
+  padding-bottom: var(--landing-card-space);
+}
+@media (max-width: 900px) {
+  .section,
+  .method-section {
+    padding-block: var(--landing-section-space-tablet);
+  }
+  .fortune-promo,
+  .reviews-teaser {
+    padding-block: 0 var(--landing-card-space-tablet);
+  }
+  .cta-section {
+    padding-bottom: var(--landing-card-space-tablet);
+  }
+}
+@media (max-width: 600px) {
+  .section,
+  .method-section {
+    padding-block: var(--landing-section-space-mobile);
+  }
+  .fortune-promo,
+  .reviews-teaser {
+    padding-block: 0 var(--landing-card-space-mobile);
+  }
+  .cta-section {
+    padding-bottom: var(--landing-card-space-mobile);
+  }
+}

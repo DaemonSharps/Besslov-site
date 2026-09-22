@@ -4,7 +4,7 @@ import { Sparkles } from "lucide-react";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { FortuneWheel } from "./fortune-wheel";
-import styles from "./fortune.module.css";
+import styles from "./fortune.module.scss";
 import { ScrollReveal } from "@/components/scroll-reveal";
 
 export const metadata: Metadata = {
