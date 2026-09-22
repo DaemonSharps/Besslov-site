@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Check, Download, ExternalLink, RotateCw } from "lucide-react";
 import { REQUIRED_COOKIE } from "@/components/cookie-notice";
 import styles from "./fortune.module.scss";
@@ -63,8 +63,6 @@ export function FortuneWheel() {
   const [rotation, setRotation] = useState(0);
   const rotationRef = useRef(0);
   const animationFrame = useRef<number | null>(null);
-  const wheelFrame = useRef<HTMLDivElement>(null);
-  const drag = useRef<{ pointerId: number; angle: number; lastTime: number; velocity: number; moved: boolean } | null>(null);
 
   useEffect(() => {
     const syncStoredState = () => {
@@ -93,7 +91,6 @@ export function FortuneWheel() {
 
       if (animationFrame.current !== null) window.cancelAnimationFrame(animationFrame.current);
       animationFrame.current = null;
-      drag.current = null;
       setAttempts(normalizedAttempts);
       setResult(null);
       setSpinning(false);
@@ -153,15 +150,6 @@ export function FortuneWheel() {
     animationFrame.current = window.requestAnimationFrame(frame);
   }
 
-  function releaseWheel(velocity: number) {
-    drag.current = null;
-    if (Math.abs(velocity) < 0.04) {
-      finishSpin();
-      return;
-    }
-    animateInertia(velocity);
-  }
-
   function spin() {
     if (!cookieReady || attempts <= 0 || spinning) return;
     setResult(null);
@@ -173,52 +161,6 @@ export function FortuneWheel() {
     animateInertia(force, slowDownDuration);
   }
 
-  function pointerAngle(event: ReactPointerEvent<HTMLDivElement>) {
-    const bounds = wheelFrame.current?.getBoundingClientRect();
-    if (!bounds) return 0;
-    return Math.atan2(event.clientX - (bounds.left + bounds.width / 2), (bounds.top + bounds.height / 2) - event.clientY) * 180 / Math.PI;
-  }
-
-  function handlePointerDown(event: ReactPointerEvent<HTMLDivElement>) {
-    if (!cookieReady || attempts <= 0 || spinning || (event.target as Element).closest("button")) return;
-    drag.current = { pointerId: event.pointerId, angle: pointerAngle(event), lastTime: performance.now(), velocity: 0, moved: false };
-    wheelFrame.current?.setPointerCapture(event.pointerId);
-  }
-
-  function handlePointerMove(event: ReactPointerEvent<HTMLDivElement>) {
-    const current = drag.current;
-    if (!current || current.pointerId !== event.pointerId) return;
-    const angle = pointerAngle(event);
-    let delta = angle - current.angle;
-    if (delta > 180) delta -= 360;
-    if (delta < -180) delta += 360;
-    const now = performance.now();
-    const elapsed = Math.max(now - current.lastTime, 1);
-    if (Math.abs(delta) > 0.1) current.moved = true;
-    rotationRef.current += delta;
-    setRotation(rotationRef.current);
-    current.velocity = delta / elapsed;
-    current.angle = angle;
-    current.lastTime = now;
-  }
-
-  function handlePointerUp(event: ReactPointerEvent<HTMLDivElement>) {
-    const current = drag.current;
-    if (!current || current.pointerId !== event.pointerId) return;
-    wheelFrame.current?.releasePointerCapture(event.pointerId);
-    if (!current.moved) {
-      drag.current = null;
-      return;
-    }
-    setResult(null);
-    setSpinning(true);
-    releaseWheel(current.velocity);
-  }
-
-  function handlePointerCancel(event: ReactPointerEvent<HTMLDivElement>) {
-    if (drag.current?.pointerId === event.pointerId) drag.current = null;
-  }
-
   const wheelStyle: WheelStyle = { "--wheel-rotation": `${rotation}deg` };
   const canSpin = cookieReady && attempts > 0 && !spinning;
   const buttonLabel = spinning ? "Колесо крутится" : result && attempts === 0 ? "Приз получен" : cookieReady ? attempts > 0 ? "Крутить!" : "Попытки закончились" : "Нужны cookie";
@@ -227,7 +169,7 @@ export function FortuneWheel() {
     <div className={styles.wheelColumn}>
       <div className={styles.wheelStage}>
         <span className={styles.pointer} aria-hidden="true" />
-        <div className={styles.wheelFrame} ref={wheelFrame} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={handlePointerUp} onPointerCancel={handlePointerCancel}>
+        <div className={styles.wheelFrame}>
           <div className={styles.wheel} style={wheelStyle} role="img" aria-label="Колесо с шестью полезными бонусами">
             {prizes.map((prize, index) => (
               <span
@@ -247,7 +189,7 @@ export function FortuneWheel() {
       </div>
 
       <p className={styles.wheelHint} aria-live="polite">
-        {spinning ? "Колесо замедляется…" : result ? attempts > 0 ? `Приз ниже. Осталось попыток: ${attempts}.` : "Попытка использована. Загляни за призом ниже." : cookieReady ? `Осталось попыток: ${attempts}. Потяни колесо и отпусти — или нажми на центр.` : "Подожди, пока включатся обязательные cookie."}
+        {spinning ? "Колесо замедляется…" : result ? attempts > 0 ? `Приз ниже. Осталось попыток: ${attempts}.` : "Попытка использована. Загляни за призом ниже." : cookieReady ? `Осталось попыток: ${attempts}. Нажми на центр, чтобы крутить.` : "Подожди, пока включатся обязательные cookie."}
       </p>
 
       {result && (

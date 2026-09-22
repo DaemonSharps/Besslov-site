@@ -89,11 +89,6 @@
   z-index: 2;
   width: 88%;
   aspect-ratio: 1;
-  touch-action: none;
-  cursor: grab;
-}
-.wheelFrame:active {
-  cursor: grabbing;
 }
 .wheel {
   position: absolute;
@@ -163,9 +158,6 @@
 .wheelButton:hover:not(:disabled) {
   background: var(--pink);
   transform: translate(-50%, -50%) scale(1.04);
-}
-.wheelButton:disabled {
-  cursor: not-allowed;
 }
 .pointer {
   position: absolute;

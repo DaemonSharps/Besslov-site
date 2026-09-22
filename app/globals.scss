@@ -9,3 +9,111 @@
 @use "../styles/components/cookie";
 @use "../styles/rhythm";
 @use "../styles/components/fortune-label";
+
+@media (hover: hover) and (pointer: fine) {
+  html,
+  body {
+    cursor: url("/assets/cursor/besslov-arrow.svg") 5 3, default;
+  }
+
+  :is(
+      a[href],
+      button,
+      summary,
+      [role="button"],
+      [role="link"],
+      [role="checkbox"],
+      [role="radio"],
+      input[type="button"],
+      input[type="submit"],
+      input[type="reset"],
+      input[type="checkbox"],
+      input[type="radio"],
+      [data-cursor="pointer"],
+      .subject-option,
+      .chaos-option,
+      .consent-label
+    ),
+  :is(
+      a[href],
+      button,
+      summary,
+      [role="button"],
+      [role="link"],
+      [role="checkbox"],
+      [role="radio"],
+      [data-cursor="pointer"],
+      .subject-option,
+      .chaos-option,
+      .consent-label
+    ) * {
+    cursor: url("/assets/cursor/besslov-pointer.svg") 13 6, pointer;
+  }
+
+  :is(
+      a[href],
+      button,
+      summary,
+      [role="button"],
+      [role="link"],
+      [role="checkbox"],
+      [role="radio"],
+      input[type="button"],
+      input[type="submit"],
+      input[type="reset"],
+      input[type="checkbox"],
+      input[type="radio"],
+      [data-cursor="pointer"],
+      .subject-option,
+      .chaos-option,
+      .consent-label
+    ):active,
+  :is(
+      a[href],
+      button,
+      summary,
+      [role="button"],
+      [role="link"],
+      [role="checkbox"],
+      [role="radio"],
+      [data-cursor="pointer"],
+      .subject-option,
+      .chaos-option,
+      .consent-label
+    ):active * {
+    cursor: url("/assets/cursor/besslov-click.svg") 13 6, pointer;
+  }
+
+  :is(
+    input:not([type]),
+    input[type="text"],
+    input[type="tel"],
+    input[type="email"],
+    input[type="url"],
+    input[type="search"],
+    input[type="password"],
+    input[type="number"],
+    textarea,
+    [contenteditable=""],
+    [contenteditable="true"],
+    [contenteditable="plaintext-only"],
+    [data-cursor="text"]
+  ) {
+    cursor: text;
+  }
+
+  :is([data-cursor="grab"], [data-cursor="grabbing"]),
+  :is([data-cursor="grab"], [data-cursor="grabbing"]) * {
+    cursor: url("/assets/cursor/besslov-grab.svg") 16 16, grab !important;
+  }
+
+  :is([data-cursor="grab"]:active, [data-cursor="grabbing"]),
+  :is([data-cursor="grab"]:active, [data-cursor="grabbing"]) * {
+    cursor: url("/assets/cursor/besslov-grabbing.svg") 16 16, grabbing !important;
+  }
+
+  html :is(:disabled, [aria-disabled="true"], [data-cursor="not-allowed"]),
+  html :is(:disabled, [aria-disabled="true"], [data-cursor="not-allowed"]) * {
+    cursor: url("/assets/cursor/besslov-not-allowed.svg") 16 16, not-allowed !important;
+  }
+}
