@@ -33,13 +33,15 @@ const caveat = localFont({
   preload: true,
 });
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 export const metadata: Metadata = {
   title: "Бесслов — русский и литература по-человечески",
   description:
     "Индивидуальные онлайн-занятия по 60 минут для 8–11 классов: русский язык, литература, подготовка к ЕГЭ и ОГЭ, сочинения и пробники.",
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
+    icon: `${basePath}/favicon.svg`,
+    shortcut: `${basePath}/favicon.svg`,
   },
 };
 
