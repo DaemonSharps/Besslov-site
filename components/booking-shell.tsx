@@ -137,7 +137,7 @@ export function BookingProvider({ children }: { children: ReactNode }) {
     if (!consent) { setError("Подтверди согласие, чтобы отправить заявку."); return; }
     setStatus("sending"); setError(""); requestId.current ||= crypto.randomUUID();
     try {
-      const response = await fetch("/api/enquiries", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:requestId.current,name:name.trim(),phone:phone.trim(),telegram:telegram.trim(),subjects,details:details.trim(),chaos,consent,website:new FormData(event.currentTarget).get("website")})});
+      const response = await fetch(process.env.NEXT_PUBLIC_ENQUIRY_API_URL || "/api/enquiries", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:requestId.current,name:name.trim(),phone:phone.trim(),telegram:telegram.trim(),subjects,details:details.trim(),chaos,consent,website:new FormData(event.currentTarget).get("website")})});
       const result = await response.json() as {error?: string; ok?: boolean};
       if (!response.ok || result.ok !== true) throw new Error(result.error || "Не получилось отправить заявку. Попробуй ещё раз.");
       setStatus("success"); requestId.current=""; setName(""); setPhone(""); setTelegram(""); setDetails(""); setSubjects([]); setConsent(false);
