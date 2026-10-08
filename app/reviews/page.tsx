@@ -11,9 +11,15 @@ export const metadata: Metadata = {
   description: "Истории занятий и отзывы учеников по русскому языку.",
 };
 
-export default function ReviewsPage() {
-  const demo = false;
-  const stories = studentStories;
+export default async function ReviewsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ demo?: string }>;
+}) {
+  const params = await searchParams;
+  const demo = process.env.NODE_ENV === "development" && params.demo === "1";
+  let stories = studentStories;
+  if (demo) stories = [...stories, ...(await import("./demo-stories")).demoStories];
 
   return (
     <>

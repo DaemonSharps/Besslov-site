@@ -1,37 +1,10 @@
 import { enquirySchema } from "@/lib/enquiry-validation";
 import { getTelegramChatIds, sendTelegramMessage } from "@/lib/telegram";
 
-export async function OPTIONS(request: Request) {
-  return handleRequest(request);
-}
-
 export async function POST(request: Request) {
-  return handleRequest(request);
-}
-
-async function handleRequest(request: Request) {
+  const headers = { "Cache-Control": "no-store" };
   const origin = request.headers.get("origin");
-  const pagesOrigin = "https://daemonsharps.github.io";
-  const isPagesRequest = origin === pagesOrigin;
-  const headers: Record<string, string> = {
-    "Cache-Control": "no-store",
-    Vary: "Origin",
-    ...(isPagesRequest
-      ? {
-          "Access-Control-Allow-Origin": pagesOrigin,
-          "Access-Control-Allow-Methods": "POST, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type",
-          "Access-Control-Max-Age": "86400",
-        }
-      : {}),
-  };
-
-  if (request.method === "OPTIONS") {
-    if (!isPagesRequest) return new Response(null, { status: 403, headers });
-    return new Response(null, { status: 204, headers });
-  }
-
-  if (origin && origin !== new URL(request.url).origin && !isPagesRequest) {
+  if (origin && origin !== new URL(request.url).origin) {
     return Response.json({ error: "Отправь заявку с этой страницы." }, { status: 403, headers });
   }
   if (!request.headers.get("content-type")?.startsWith("application/json")) {

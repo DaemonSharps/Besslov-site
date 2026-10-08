@@ -8,8 +8,7 @@ import { useBooking } from "@/components/booking-shell";
 export function SiteHeader({ reviews = false, fortune = false }: { reviews?: boolean; fortune?: boolean }) {
   const [mobileNav, setMobileNav] = useState(false);
   const { startBooking } = useBooking();
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-  const prefix = reviews || fortune ? `${basePath}/` : "";
+  const prefix = reviews || fortune ? "/" : "";
   return (
     <header className="site-header">
       <div className="header-inner container">
@@ -18,8 +17,8 @@ export function SiteHeader({ reviews = false, fortune = false }: { reviews?: boo
           {[["story", "Моя история"], ["lessons", "Занятия"], ["method", "Как всё устроено"], ["formats", "Форматы"]].map(([id, label]) => (
             <a key={id} onClick={() => setMobileNav(false)} href={`${prefix}#${id}`}>{label}</a>
           ))}
-          <a href={`${basePath}/reviews`} onClick={() => setMobileNav(false)} aria-current={reviews ? "page" : undefined}>Отзывы</a>
-          <a href={`${basePath}/fortune`} onClick={() => setMobileNav(false)} aria-current={fortune ? "page" : undefined}>Рулетка</a>
+          <a href="/reviews" onClick={() => setMobileNav(false)} aria-current={reviews ? "page" : undefined}>Отзывы</a>
+          <a href="/fortune" onClick={() => setMobileNav(false)} aria-current={fortune ? "page" : undefined}>Рулетка</a>
         </nav>
         <button className="button button-pink header-cta" onClick={() => { setMobileNav(false); startBooking(); }}>
           Давай знакомиться <ArrowUpRight size={17} />
